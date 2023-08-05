@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#define EXPECT(condition) return condition;
+
 void set_output_color_to_green() {
     printf("\033[0;32m");
 }
@@ -23,15 +25,15 @@ const int add(const int a, const int b) {
 }
 
 bool it_can_add_two_positive_integers() {
-    return add(2, 3) == 5;
+    EXPECT(add(2, 3) == 5);
 }
 
 bool it_can_add_two_negative_integers() {
-    return add(-2, -3) == -5;
+    EXPECT(add(-2, -3) == -5);
 }
 
 bool it_can_add_a_positive_and_a_negative_integer() {
-    return add(-2, 3) == 1;
+    EXPECT(add(-2, 3) == 1);
 }
 
 int main() {
