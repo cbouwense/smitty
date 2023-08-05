@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.kt": "kotlin",
+    "assert.h": "c",
+    "stdbool.h": "c"
+}
+}
