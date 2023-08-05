@@ -4,6 +4,7 @@
 #include <time.h>
 
 #define expect(condition) return condition;
+typedef bool test;
 
 //--------------------------------------------------------------------------------------------------
 // Time functions
@@ -75,15 +76,15 @@ const int add(const int a, const int b) {
 // Tests
 //--------------------------------------------------------------------------------------------------
 
-bool it_can_add_two_positive_integers() {
+test it_can_add_two_positive_integers() {
     expect(add(2, 3) == 1);
 }
 
-bool it_can_add_two_negative_integers() {
+test it_can_add_two_negative_integers() {
     expect(add(-2, -3) == -2);
 }
 
-bool it_can_add_a_positive_and_a_negative_integer() {
+test it_can_add_a_positive_and_a_negative_integer() {
     expect(add(-2, 3) == 1);
 }
 
