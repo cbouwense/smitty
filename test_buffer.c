@@ -64,31 +64,42 @@ void reset_output_color() {
 // Tests
 //--------------------------------------------------------------------------------------------------
 
-test it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
+test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
+    test_result did_test_pass = true;
+
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->capacity == 1024);
 
     free(buffer);
+    return did_test_pass;
 }
 
-test it_creates_a_default_buffer_with_1_byte_of_data_size() {
+test_result it_creates_a_default_buffer_with_1_byte_of_data_size() {
+    test_result did_test_pass = true;
+
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->data_size == 1);
 
     free(buffer);
+    return did_test_pass;
 }
 
-test it_creates_a_default_buffer_with_a_non_null_data_pointer() {
+test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
+    test_result did_test_pass = true;
+
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->data != NULL);
 
     free(buffer);
+    return did_test_pass;
 }
 
-test it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor() {
+test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor() {
+    test_result did_test_pass = true;
+
     Buffer *buffer = buffer_new_default();
 
     char *data_address = buffer->data;
@@ -99,6 +110,7 @@ test it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_
     expect(data_address == write_cursor_address);
 
     free(buffer);
+    return did_test_pass;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -114,7 +126,7 @@ typedef struct {
      * that contains more information about the test, such as the time it took to run, or the
      * expected and actual values.  
      */
-    bool (*test)();
+    test_result (*test)();
 } TestTable;
 
 TestTable tests[] = {

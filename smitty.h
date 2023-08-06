@@ -6,8 +6,8 @@
 #include <string.h>
 #include <time.h>
 
-#define expect(condition) return condition;
-typedef bool test;
+#define expect(condition) did_test_pass = condition;
+typedef bool test_result;
 
 //--------------------------------------------------------------------------------------------------
 // Time functions
