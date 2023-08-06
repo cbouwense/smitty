@@ -1,0 +1,5 @@
+- automatically sum number of tests
+- report the test that failed
+- report expectation failure intelligently
+- is there an intelligent way to cleanup memory allocations on a per-test basis
+- before each hook

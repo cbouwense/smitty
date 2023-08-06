@@ -11,4 +11,3 @@ Buffer *buffer_new_default() {
 
     return buffer;
 }
-

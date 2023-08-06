@@ -3,6 +3,7 @@
     "*.kt": "kotlin",
     "assert.h": "c",
     "stdbool.h": "c",
-    "types.h": "c"
+    "types.h": "c",
+    "smitty.h": "c"
 }
 }

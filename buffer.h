@@ -6,6 +6,7 @@
 // TODO: this should probably be a size_t?
 #define Bytes int
 
+// TODO: should these pointers be a char? or a void? or something else?
 typedef struct buffer {
     char *data;
 
