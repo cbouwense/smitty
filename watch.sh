@@ -1,1 +1,1 @@
-ls *.c | entr sh -c './run.sh'
+ls *.c *.h | entr sh -c './run.sh'

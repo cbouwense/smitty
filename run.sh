@@ -1,3 +1,3 @@
 clear
-gcc -o build/smitty smitty.c add.c
-build/smitty
+gcc -o build/test_buffer test_buffer.c buffer.c
+build/test_buffer
