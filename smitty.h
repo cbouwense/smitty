@@ -10,7 +10,11 @@
 // Types
 //--------------------------------------------------------------------------------------------------
 
-typedef bool test_result;
+typedef enum {
+    TEST_PASS,
+    TEST_FAIL,
+    TEST_NOT_FOUND
+} test_result;
 
 typedef struct {
     const char *name;
@@ -24,13 +28,11 @@ typedef struct {
     test_result (*test)();
 } Test;
 
-
-
 //--------------------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------------------
 
-#define expect(condition) did_test_pass = condition;
+#define expect(condition) if(!(condition)) return TEST_FAIL;
 
 #define register_test(name) {#name, name}
 
@@ -40,7 +42,9 @@ typedef struct {
 
 void run_test_suite(Test tests[]);
 
-test_result call_test(const char *name, Test tests[]);
+test_result (*find_test_by_name(const char *name, Test tests[]))();
+
+test_result run_test(const char *name, Test tests[]);
 
 //--------------------------------------------------------------------------------------------------
 // Time utilities

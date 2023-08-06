@@ -23,14 +23,22 @@ void run_test_suite(Test tests[]) {
     // Run each test and record results.
     for (int i = 0; tests[i].name != NULL; i++) {
         const char *test_name = tests[i].name;
-        const test_result did_test_pass = call_test(tests[i].name, tests);
+        const test_result result = run_test(tests[i].name, tests);
 
-        if (did_test_pass) {
-            passed_test_count++;
-        } else {
-            // Add test to list of failures.
-            failed_test_names[failed_test_count] = test_name;
-            failed_test_count++;
+        switch (result) {
+            case TEST_PASS:
+                passed_test_count++;
+                break;
+
+            /* 
+             * NOTE: Currently TEST_NOT_FOUND is counted as a failure, but it might be better to
+             * count it as a separate category to report.
+             */
+            case TEST_NOT_FOUND:
+            case TEST_FAIL:
+                failed_test_names[failed_test_count] = test_name;
+                failed_test_count++;
+                break;
         }
     }
 
@@ -82,15 +90,23 @@ void run_test_suite(Test tests[]) {
     reset_output_color();
 }
 
-test_result call_test(const char *name, Test tests[]) {
+test_result (*find_test_by_name(const char *name, Test tests[]))() {
     for (int i = 0; tests[i].name != NULL; i++) {
         if (strcmp(name, tests[i].name) == 0) {
-            return tests[i].test();
+            return tests[i].test;
         }
     }
 
-    printf("Function not found: %s\n", name);
-    return false;
+    printf("Test not found: %s\n", name);
+    return NULL;
+}
+
+test_result run_test(const char *name, Test tests[]) {
+    test_result (*test)() = find_test_by_name(name, tests);
+
+    if (test == NULL) return TEST_FAIL;
+
+    return test() == TEST_FAIL ? TEST_FAIL : TEST_PASS;
 }
 
 //--------------------------------------------------------------------------------------------------
