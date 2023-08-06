@@ -1,10 +1,5 @@
-#include <assert.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <time.h>
-
-#define expect(condition) return condition;
-typedef bool test;
+#include "add.h"
+#include "smitty.h"
 
 //--------------------------------------------------------------------------------------------------
 // Time functions
@@ -28,17 +23,17 @@ const double time_in_nanoseconds(double time) {
 
 void print_most_readable_time(double time) {
     if (time < 0.000001) {
-        printf("%f ns", time_in_nanoseconds(time));
+        printf("%f ns\n", time_in_nanoseconds(time));
         return;
     }
     
     if (time < 0.001) {
-        printf("%f µs", time_in_microseconds(time));
+        printf("%f µs\n", time_in_microseconds(time));
         return;
     }
     
     if (time < 1) {
-        printf("%f ms", time_in_milliseconds(time));
+        printf("%f ms\n", time_in_milliseconds(time));
         return;
     }
 
@@ -48,6 +43,7 @@ void print_most_readable_time(double time) {
 //--------------------------------------------------------------------------------------------------
 // Output style functions
 //--------------------------------------------------------------------------------------------------
+
 void set_output_color_to_green() {
     printf("\033[0;32m");
 }
@@ -65,23 +61,15 @@ void reset_output_color() {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Functions under test
-//--------------------------------------------------------------------------------------------------
-
-const int add(const int a, const int b) {
-    return a + b;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Tests
 //--------------------------------------------------------------------------------------------------
 
 test it_can_add_two_positive_integers() {
-    expect(add(2, 3) == 1);
+    expect(add(2, 3) == 5);
 }
 
 test it_can_add_two_negative_integers() {
-    expect(add(-2, -3) == -2);
+    expect(add(-2, -3) == -5);
 }
 
 test it_can_add_a_positive_and_a_negative_integer() {

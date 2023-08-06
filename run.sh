@@ -1,3 +1,3 @@
 clear
-gcc -o testing-fun testing-fun.c
-./testing-fun
+gcc -o build/smitty smitty.c add.c
+build/smitty
