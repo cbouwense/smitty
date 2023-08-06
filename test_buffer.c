@@ -38,20 +38,14 @@ test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_curs
 
     expect(data_address == read_cursor_address);
     expect(data_address == write_cursor_address);
-
-    // TODO: Maybe have some nice utility to free all used memory from unit tests. Unsure if that's
-    // overengineering or not.
+    
     free(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-// Driver
+// Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-/*
- * TODO: it would be nice if we didn't even have to do this, and we could just have some magic that
- * would automatically run all the tests in the file.
- */
 Test tests[] = {
     register_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
     register_test(it_creates_a_default_buffer_with_1_byte_of_data_size),
@@ -60,8 +54,4 @@ Test tests[] = {
     {NULL, NULL}
 };
 
-int main() {
-    run_test_suite(tests);
-
-    return 0;
-}
+run_smitty_suite()

@@ -48,10 +48,21 @@ void run_test_suite(Test tests[]) {
         set_output_style_to_bold();
         printf("All tests passed!\n\n");
         reset_output_color();
-    } else {
+    } else if (failed_test_count != total_test_count) {
         set_output_color_to_red();
         set_output_style_to_bold();
         printf("Some tests failed!\n\n");
+        reset_output_color();
+
+        for(int i = 0; i < failed_test_count; i++) {
+            set_output_color_to_red();
+            printf("%s\n\n", failed_test_names[i]);
+            reset_output_color();
+        }
+    } else { // Every test failed
+        set_output_color_to_red();
+        set_output_style_to_bold();
+        printf("All tests failed!\n\n");
         reset_output_color();
 
         for(int i = 0; i < failed_test_count; i++) {
