@@ -1,10 +1,6 @@
 #include "buffer.h"
 #include "smitty.h"
 
-//--------------------------------------------------------------------------------------------------
-// Tests
-//--------------------------------------------------------------------------------------------------
-
 test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
     Buffer *buffer = buffer_new_default();
 
@@ -38,7 +34,7 @@ test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_curs
 
     expect(data_address == read_cursor_address);
     expect(data_address == write_cursor_address);
-    
+
     free(buffer);
 }
 

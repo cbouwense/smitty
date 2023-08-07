@@ -13,7 +13,8 @@
 typedef enum {
     TEST_PASS,
     TEST_FAIL,
-    TEST_NOT_FOUND
+    TEST_NOT_FOUND,
+    TEST_ENCOUNTERED_NO_FAILURES,
 } test_result;
 
 typedef struct {
@@ -32,7 +33,9 @@ typedef struct {
 // Macros
 //--------------------------------------------------------------------------------------------------
 
-#define expect(condition) if(!(condition)) return TEST_FAIL;
+// #define expect(condition) return condition ? TEST_PASS : TEST_FAIL;
+// #define expect(assertion) if (!assertion) return TEST_FAIL;
+#define expect(assertion) if (!(assertion)) return TEST_FAIL
 
 #define register_test(name) {#name, name}
 
@@ -41,6 +44,13 @@ typedef struct {
         run_test_suite(tests); \
         return 0; \
     }
+
+#define smitty_test(description, body) \
+    test_result description() { \
+        body \
+        return TEST_PASS; \
+    }
+
 
 //--------------------------------------------------------------------------------------------------
 // Test utilities
@@ -51,6 +61,8 @@ void run_test_suite(Test tests[]);
 test_result (*find_test_by_name(const char *name, Test tests[]))();
 
 test_result run_test(const char *name, Test tests[]);
+
+char *test_result_to_string(test_result result);
 
 //--------------------------------------------------------------------------------------------------
 // Time utilities

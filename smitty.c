@@ -115,9 +115,44 @@ test_result (*find_test_by_name(const char *name, Test tests[]))() {
 test_result run_test(const char *name, Test tests[]) {
     test_result (*test)() = find_test_by_name(name, tests);
 
-    if (test == NULL) return TEST_FAIL;
+    const test_result result = test == NULL ? TEST_NOT_FOUND : test();
+    // printf("%s: %s\n", name, test_result_to_string(result));
 
-    return test() == TEST_FAIL ? TEST_FAIL : TEST_PASS;
+    switch (result) {
+        case TEST_PASS:
+        case TEST_ENCOUNTERED_NO_FAILURES:
+        default:
+            // set_output_color_to_green();
+            // set_output_style_to_bold();
+            // printf("PASS\n\n");
+            // reset_output_color();
+
+            return TEST_PASS;
+            
+        case TEST_FAIL:
+        case TEST_NOT_FOUND:
+            // set_output_color_to_red();
+            // set_output_style_to_bold();
+            // printf("FAIL\n\n");
+            // reset_output_color();
+            
+            return TEST_FAIL;
+    }
+}
+
+char *test_result_to_string(test_result result) {
+    switch (result) {
+        case TEST_PASS:
+            return "PASS";
+        case TEST_FAIL:
+            return "FAIL";
+        case TEST_NOT_FOUND:
+            return "NOT FOUND";
+        case TEST_ENCOUNTERED_NO_FAILURES:
+            return "ENCOUNTERED NO FAILURES";
+        default:
+            return "UNKNOWN";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
