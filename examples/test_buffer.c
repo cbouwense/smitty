@@ -1,5 +1,5 @@
+#include "../src/smitty.h"
 #include "buffer.h"
-#include "smitty.h"
 
 smitty_test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
     Buffer *buffer = buffer_new_default();
