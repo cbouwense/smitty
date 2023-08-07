@@ -42,12 +42,11 @@ smitty_test_result it_creates_a_default_buffer_with_the_same_address_for_data_re
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-smitty_test_case_info tests[] = {
+smitty_register_tests(
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1_byte_of_data_size),
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_a_non_null_data_pointer),
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
-    {NULL, NULL}
-};
+)
 
 smitty_run_test_suite()

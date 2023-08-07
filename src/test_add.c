@@ -32,5 +32,9 @@ void before_each() {
     printf("This runs before each test\n");
 }
 
-// smitty_run_test_suite()
-smitty_run_test_suite_with_before_each(before_each)
+void after_each() {
+    printf("This runs after each test\n");
+}
+
+// TODO: It might be nice to have some sort of options struct.
+smitty_run_test_suite_with_before_and_after_each(before_each, after_each)

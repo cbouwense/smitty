@@ -5,7 +5,11 @@
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)()) {
+void smitty_run_tests(
+    smitty_test_case_info tests[],
+    void (*before_each)(),
+    void (*after_each)() 
+) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -26,7 +30,8 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)()) {
 
         const char *test_name = tests[i].name;
         const smitty_test_result result = smitty_run_test(tests[i].name, tests);
-        // printf("%s: %s\n", test_name, smitty_test_result_to_string(result));
+        
+        if (after_each != NULL) after_each();
 
         switch (result) {
             case TEST_PASS:

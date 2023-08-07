@@ -45,13 +45,25 @@ typedef struct {
 
 #define smitty_run_test_suite() \
     int main() { \
-        smitty_run_tests(tests, NULL); \
+        smitty_run_tests(tests, NULL, NULL); \
         return 0; \
     }
 
 #define smitty_run_test_suite_with_before_each(before_each) \
     int main() { \
-        smitty_run_tests(tests, before_each); \
+        smitty_run_tests(tests, before_each, NULL); \
+        return 0; \
+    }
+
+#define smitty_run_test_suite_with_after_each(after_each) \
+    int main() { \
+        smitty_run_tests(tests, NULL, after_each); \
+        return 0; \
+    }
+
+#define smitty_run_test_suite_with_before_and_after_each(before_each, after_each) \
+    int main() { \
+        smitty_run_tests(tests, before_each, after_each); \
         return 0; \
     }
 
@@ -67,7 +79,8 @@ typedef struct {
 
 void smitty_run_tests(
     smitty_test_case_info tests[],
-    void (*before_each)()
+    void (*before_each)(),
+    void (*after_each)()
 );
 
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
