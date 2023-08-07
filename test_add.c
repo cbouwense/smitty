@@ -1,19 +1,23 @@
 #include "add.h"
 #include "smitty.h"
 
-smitty_test(it_can_add_two_positive_integers, {
+before_each({
+    printf("before_each\n");
+})
+
+test_case(it_can_add_two_positive_integers, {
     expect(add(2, 3) == 5);
 })
 
-smitty_test(it_can_add_two_negative_integers, {
+test_case(it_can_add_two_negative_integers, {
     expect(add(-2, -3) == -5);
 })
 
-smitty_test(it_can_add_two_numbers_whose_sum_is_zero, {
+test_case(it_can_add_two_numbers_whose_sum_is_zero, {
     expect(add(-42, 42) == 0);
 })
 
-smitty_test(it_can_add_a_positive_and_a_negative_integer, {
+test_case(it_can_add_a_positive_and_a_negative_integer, {
     expect(add(-2, 3) == 1);
 })
 
@@ -21,7 +25,7 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-Test tests[] = {
+test_case_info tests[] = {
     register_test(it_can_add_two_positive_integers),
     register_test(it_can_add_two_negative_integers),
     register_test(it_can_add_two_numbers_whose_sum_is_zero),

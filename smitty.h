@@ -14,27 +14,25 @@ typedef enum {
     TEST_PASS,
     TEST_FAIL,
     TEST_NOT_FOUND,
-    TEST_ENCOUNTERED_NO_FAILURES,
 } test_result;
+
+// A function pointer to a function that returns a test_result, named test_case_ptr.
+typedef test_result (*test_case_ptr)();
 
 typedef struct {
     const char *name;
-
-    /** 
-     * The return type of test is a bool pointer for now to indicate whether or not the test
-     * passed. In the future it might be better, or necessary, for this to be some sort of struct
-     * that contains more information about the test, such as the time it took to run, or the
-     * expected and actual values.  
-     */
-    test_result (*test)();
-} Test;
+    test_case_ptr test_case;
+} test_case_info;
 
 //--------------------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------------------
 
-// #define expect(condition) return condition ? TEST_PASS : TEST_FAIL;
-// #define expect(assertion) if (!assertion) return TEST_FAIL;
+/*
+ * If an assertion is true, the test continues. If it fails, the test returns TEST_FAIL. This means
+ * that the first assertion to fail will cause the test to stop. It would be nicer if the entire
+ * test ran, all the expects were evaluated, and then the test result showed each expect.
+ */
 #define expect(assertion) if (!(assertion)) return TEST_FAIL
 
 #define register_test(name) {#name, name}
@@ -45,22 +43,21 @@ typedef struct {
         return 0; \
     }
 
-#define smitty_test(description, body) \
+#define test_case(description, body) \
     test_result description() { \
         body \
         return TEST_PASS; \
     }
 
-
 //--------------------------------------------------------------------------------------------------
-// Test utilities
+// Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(Test tests[]);
+void run_test_suite(test_case_info tests[]);
 
-test_result (*find_test_by_name(const char *name, Test tests[]))();
+test_result (*find_test_by_name(const char *name, test_case_info tests[]))();
 
-test_result run_test(const char *name, Test tests[]);
+test_result run_test(const char *name, test_case_info tests[]);
 
 char *test_result_to_string(test_result result);
 

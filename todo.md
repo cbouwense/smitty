@@ -1,5 +1,3 @@
-- automatically sum number of tests
-- report the test that failed
+- automatically register tests. at least render a warning for unregistered tests?
 - report expectation failure intelligently
-- is there an intelligent way to cleanup memory allocations on a per-test basis
 - before each hook

@@ -2,10 +2,10 @@
 #include "smitty.h"
 
 //--------------------------------------------------------------------------------------------------
-// Test utilities
+// Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(Test tests[]) {
+void run_test_suite(test_case_info tests[]) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -101,10 +101,10 @@ void run_test_suite(Test tests[]) {
     reset_output_color();
 }
 
-test_result (*find_test_by_name(const char *name, Test tests[]))() {
+test_result (*find_test_by_name(const char *name, test_case_info tests[]))() {
     for (int i = 0; tests[i].name != NULL; i++) {
         if (strcmp(name, tests[i].name) == 0) {
-            return tests[i].test;
+            return tests[i].test_case;
         }
     }
 
@@ -112,30 +112,18 @@ test_result (*find_test_by_name(const char *name, Test tests[]))() {
     return NULL;
 }
 
-test_result run_test(const char *name, Test tests[]) {
-    test_result (*test)() = find_test_by_name(name, tests);
+test_result run_test(const char *name, test_case_info tests[]) {
+    test_result (*test_case)() = find_test_by_name(name, tests);
 
-    const test_result result = test == NULL ? TEST_NOT_FOUND : test();
-    // printf("%s: %s\n", name, test_result_to_string(result));
+    const test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
 
     switch (result) {
         case TEST_PASS:
-        case TEST_ENCOUNTERED_NO_FAILURES:
         default:
-            // set_output_color_to_green();
-            // set_output_style_to_bold();
-            // printf("PASS\n\n");
-            // reset_output_color();
-
             return TEST_PASS;
             
         case TEST_FAIL:
         case TEST_NOT_FOUND:
-            // set_output_color_to_red();
-            // set_output_style_to_bold();
-            // printf("FAIL\n\n");
-            // reset_output_color();
-            
             return TEST_FAIL;
     }
 }
@@ -148,8 +136,6 @@ char *test_result_to_string(test_result result) {
             return "FAIL";
         case TEST_NOT_FOUND:
             return "NOT FOUND";
-        case TEST_ENCOUNTERED_NO_FAILURES:
-            return "ENCOUNTERED NO FAILURES";
         default:
             return "UNKNOWN";
     }

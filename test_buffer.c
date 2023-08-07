@@ -42,7 +42,7 @@ test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_curs
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-Test tests[] = {
+test_case_info tests[] = {
     register_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
     register_test(it_creates_a_default_buffer_with_1_byte_of_data_size),
     register_test(it_creates_a_default_buffer_with_a_non_null_data_pointer),
