@@ -5,7 +5,7 @@
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(test_case_info tests[], void (*before_each)()) {
+void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)()) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -25,8 +25,8 @@ void run_test_suite(test_case_info tests[], void (*before_each)()) {
         if (before_each != NULL) before_each();
 
         const char *test_name = tests[i].name;
-        const test_result result = run_test(tests[i].name, tests);
-        // printf("%s: %s\n", test_name, test_result_to_string(result));
+        const smitty_test_result result = smitty_run_test(tests[i].name, tests);
+        // printf("%s: %s\n", test_name, smitty_test_result_to_string(result));
 
         switch (result) {
             case TEST_PASS:
@@ -104,7 +104,7 @@ void run_test_suite(test_case_info tests[], void (*before_each)()) {
     reset_output_color();
 }
 
-test_result (*find_test_by_name(const char *name, test_case_info tests[]))() {
+smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))() {
     for (int i = 0; tests[i].name != NULL; i++) {
         if (strcmp(name, tests[i].name) == 0) {
             return tests[i].test_case;
@@ -115,10 +115,10 @@ test_result (*find_test_by_name(const char *name, test_case_info tests[]))() {
     return NULL;
 }
 
-test_result run_test(const char *name, test_case_info tests[]) {
-    test_result (*test_case)() = find_test_by_name(name, tests);
+smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[]) {
+    smitty_test_result (*test_case)() = find_test_by_name(name, tests);
 
-    const test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
+    const smitty_test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
 
     switch (result) {
         case TEST_PASS:
@@ -131,7 +131,7 @@ test_result run_test(const char *name, test_case_info tests[]) {
     }
 }
 
-char *test_result_to_string(test_result result) {
+char *smitty_test_result_to_string(smitty_test_result result) {
     switch (result) {
         case TEST_PASS:
             return "PASS";

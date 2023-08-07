@@ -21,16 +21,16 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-test_case_info tests[] = {
-    register_test(it_can_add_two_positive_integers),
-    register_test(it_can_add_two_negative_integers),
-    register_test(it_can_add_two_numbers_whose_sum_is_zero),
-    register_test(it_can_add_a_positive_and_a_negative_integer),
-    {NULL, NULL}
-};
+smitty_register_tests(
+    smitty_test_as_name_and_callback(it_can_add_two_positive_integers),
+    smitty_test_as_name_and_callback(it_can_add_two_negative_integers),
+    smitty_test_as_name_and_callback(it_can_add_two_numbers_whose_sum_is_zero),
+    smitty_test_as_name_and_callback(it_can_add_a_positive_and_a_negative_integer),
+)
 
 void before_each() {
     printf("This runs before each test\n");
 }
 
-run_smitty_suite_with_before_each(before_each)
+// smitty_run_test_suite()
+smitty_run_test_suite_with_before_each(before_each)

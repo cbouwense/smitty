@@ -1,7 +1,7 @@
 #include "buffer.h"
 #include "smitty.h"
 
-test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
+smitty_test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->capacity == 1024);
@@ -9,7 +9,7 @@ test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
     free(buffer);
 }
 
-test_result it_creates_a_default_buffer_with_1_byte_of_data_size() {
+smitty_test_result it_creates_a_default_buffer_with_1_byte_of_data_size() {
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->data_size == 1);
@@ -17,7 +17,7 @@ test_result it_creates_a_default_buffer_with_1_byte_of_data_size() {
     free(buffer);
 }
 
-test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
+smitty_test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
     Buffer *buffer = buffer_new_default();
 
     expect(buffer->data != NULL);
@@ -25,7 +25,7 @@ test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
     free(buffer);
 }
 
-test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor() {
+smitty_test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor() {
     Buffer *buffer = buffer_new_default();
 
     char *data_address = buffer->data;
@@ -42,12 +42,12 @@ test_result it_creates_a_default_buffer_with_the_same_address_for_data_read_curs
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-test_case_info tests[] = {
-    register_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
-    register_test(it_creates_a_default_buffer_with_1_byte_of_data_size),
-    register_test(it_creates_a_default_buffer_with_a_non_null_data_pointer),
-    register_test(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
+smitty_test_case_info tests[] = {
+    smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
+    smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1_byte_of_data_size),
+    smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_a_non_null_data_pointer),
+    smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
     {NULL, NULL}
 };
 
-run_smitty_suite()
+smitty_run_test_suite()

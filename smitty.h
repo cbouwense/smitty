@@ -14,15 +14,15 @@ typedef enum {
     TEST_PASS,
     TEST_FAIL,
     TEST_NOT_FOUND,
-} test_result;
+} smitty_test_result;
 
-// A function pointer to a function that returns a test_result, named test_case_ptr.
-typedef test_result (*test_case_ptr)();
+// A function pointer to a function that returns a smitty_test_result, named test_case_ptr.
+typedef smitty_test_result (*test_case_ptr)();
 
 typedef struct {
     const char *name;
     test_case_ptr test_case;
-} test_case_info;
+} smitty_test_case_info;
 
 //--------------------------------------------------------------------------------------------------
 // Macros
@@ -35,22 +35,28 @@ typedef struct {
  */
 #define expect(assertion) if (!(assertion)) return TEST_FAIL
 
-#define register_test(name) {#name, name}
+#define smitty_test_as_name_and_callback(name) {#name, name}
 
-#define run_smitty_suite() \
+#define smitty_register_tests(...) \
+    smitty_test_case_info tests[] = { \
+        __VA_ARGS__ \
+        {NULL, NULL} \
+    };
+
+#define smitty_run_test_suite() \
     int main() { \
-        run_test_suite(tests, NULL); \
+        smitty_run_tests(tests, NULL); \
         return 0; \
     }
 
-#define run_smitty_suite_with_before_each(before_each) \
+#define smitty_run_test_suite_with_before_each(before_each) \
     int main() { \
-        run_test_suite(tests, before_each); \
+        smitty_run_tests(tests, before_each); \
         return 0; \
     }
 
 #define smitty_test(description, body) \
-    test_result description() { \
+    smitty_test_result description() { \
         body \
         return TEST_PASS; \
     }
@@ -59,16 +65,16 @@ typedef struct {
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(
-    test_case_info tests[],
+void smitty_run_tests(
+    smitty_test_case_info tests[],
     void (*before_each)()
 );
 
-test_result (*find_test_by_name(const char *name, test_case_info tests[]))();
+smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
 
-test_result run_test(const char *name, test_case_info tests[]);
+smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[]);
 
-char *test_result_to_string(test_result result);
+char *smitty_test_result_to_string(smitty_test_result result);
 
 //--------------------------------------------------------------------------------------------------
 // Time utilities
