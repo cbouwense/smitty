@@ -1,6 +1,6 @@
 # Smitty
 
-A testing framework for C programs.
+A unit testing library for C.
 
 # Quick start
 
