@@ -5,7 +5,7 @@
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(test_case_info tests[]) {
+void run_test_suite(test_case_info tests[], void (*before_each)()) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -22,8 +22,11 @@ void run_test_suite(test_case_info tests[]) {
 
     // Run each test and record results.
     for (int i = 0; tests[i].name != NULL; i++) {
+        if (before_each != NULL) before_each();
+
         const char *test_name = tests[i].name;
         const test_result result = run_test(tests[i].name, tests);
+        // printf("%s: %s\n", test_name, test_result_to_string(result));
 
         switch (result) {
             case TEST_PASS:

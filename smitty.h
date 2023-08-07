@@ -39,11 +39,17 @@ typedef struct {
 
 #define run_smitty_suite() \
     int main() { \
-        run_test_suite(tests); \
+        run_test_suite(tests, NULL); \
         return 0; \
     }
 
-#define test_case(description, body) \
+#define run_smitty_suite_with_before_each(before_each) \
+    int main() { \
+        run_test_suite(tests, before_each); \
+        return 0; \
+    }
+
+#define smitty_test(description, body) \
     test_result description() { \
         body \
         return TEST_PASS; \
@@ -53,7 +59,10 @@ typedef struct {
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void run_test_suite(test_case_info tests[]);
+void run_test_suite(
+    test_case_info tests[],
+    void (*before_each)()
+);
 
 test_result (*find_test_by_name(const char *name, test_case_info tests[]))();
 
