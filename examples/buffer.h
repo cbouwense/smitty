@@ -26,8 +26,6 @@ Buffer *buffer_new_default();
 
 Buffer *buffer_new(size_t capacity);
 
-void buffer_free(Buffer *buffer);
-
 void buffer_clear(Buffer *buffer);
 
 void buffer_write(Buffer *buffer, char *data, size_t size);

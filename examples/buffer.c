@@ -5,6 +5,8 @@ Buffer *buffer_new_default() {
 }
 
 Buffer *buffer_new(size_t capacity) {
+    if (capacity == 0) return NULL;
+
     Buffer *buffer = malloc(sizeof(Buffer));
 
     buffer->data = malloc(capacity);
