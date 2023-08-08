@@ -6,6 +6,7 @@
     "types.h": "c",
     "smitty.h": "c",
     "typeinfo": "c",
-    "string.h": "c"
-}
+    "string.h": "c",
+    "buffer.h": "c"
+  }
 }

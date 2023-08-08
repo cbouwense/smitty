@@ -3,8 +3,6 @@
 #include <stdlib.h>
 
 #define BUFFER_DEFAULT_CAPACITY 1024
-// TODO: this should probably be a size_t?
-#define Bytes int
 
 // TODO: should these pointers reall be a char? or a void? or something else?
 typedef struct buffer {
@@ -12,12 +10,12 @@ typedef struct buffer {
 
     /**
      * The size of each data element, in bytes. For example, a buffer of
-     * characters would have a data_size of 1, while a buffer of integers would
-     * have a data_size of 4.
+     * characters would have a data_element_size of 1, while a buffer of integers would
+     * have a data_element_size of 4.
      */
-    Bytes data_size;
+    size_t data_element_size;
     
-    Bytes capacity;
+    size_t capacity;
     
     char *read_cursor;
     
@@ -26,12 +24,12 @@ typedef struct buffer {
 
 Buffer *buffer_new_default();
 
-Buffer *buffer_new(int capacity);
+Buffer *buffer_new(size_t capacity);
 
 void buffer_free(Buffer *buffer);
 
 void buffer_clear(Buffer *buffer);
 
-void buffer_write(Buffer *buffer, char *data, int size);
+void buffer_write(Buffer *buffer, char *data, size_t size);
 
-void buffer_read(Buffer *buffer, int size);
+void buffer_read(Buffer *buffer, size_t size);
