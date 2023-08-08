@@ -9,14 +9,6 @@ smitty_test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
     free(buffer);
 }
 
-smitty_test_result it_creates_a_default_buffer_with_1_byte_of_data_element_size() {
-    Buffer *buffer = buffer_new_default();
-
-    expect(buffer->data_element_size == 1);
-
-    free(buffer);
-}
-
 smitty_test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
     Buffer *buffer = buffer_new_default();
 
@@ -54,15 +46,13 @@ smitty_test_result it_returns_null_when_buffer_created_with_zero_capacity() {
     free(buffer);
 }
 
-smitty_test_result it_moves_read_cursor_to_the_right_when_data_is_written() {
-    Buffer *buffer = buffer_new(42);
+smitty_test_result it_returns_failure_when_user_attempts_an_overflow() {
+    Buffer *buffer = buffer_new(3);
     char *data = "Hello, world!";
-    size_t data_size = strlen(data);
 
-    ReturnCode result = buffer_write(buffer, data, data_size);
+    ReturnCode result = buffer_write(buffer, data);
 
-    expect(result == SUCCESS);
-    // expect(buffer->read_cursor == buffer->data + data_size);
+    expect(result == ATTEMPTED_OVERFLOW);
 
     free(buffer);
 }
@@ -73,12 +63,11 @@ smitty_test_result it_moves_read_cursor_to_the_right_when_data_is_written() {
 
 smitty_register_tests(
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
-    smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_1_byte_of_data_element_size),
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_a_non_null_data_pointer),
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
     smitty_test_as_name_and_callback(it_creates_a_buffer_with_the_specified_capacity),
     smitty_test_as_name_and_callback(it_returns_null_when_buffer_created_with_zero_capacity),
-    smitty_test_as_name_and_callback(it_moves_read_cursor_to_the_right_when_data_is_written),
+    smitty_test_as_name_and_callback(it_returns_failure_when_user_attempts_an_overflow),
 )
 
 smitty_run_test_suite()

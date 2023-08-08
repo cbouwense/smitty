@@ -10,7 +10,6 @@ Buffer *buffer_new(size_t capacity) {
     Buffer *buffer = malloc(sizeof(Buffer));
 
     buffer->data = malloc(capacity);
-    buffer->data_element_size = 1;
     buffer->capacity = capacity;
     buffer->read_cursor = buffer->data;
     buffer->write_cursor = buffer->data;
@@ -18,6 +17,12 @@ Buffer *buffer_new(size_t capacity) {
     return buffer;
 }
 
-ReturnCode buffer_write(Buffer *buffer, char *data, size_t size) {
+ReturnCode buffer_write(Buffer *buffer, char *data) {
+    const size_t data_size = strlen(data);
+    const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
+    if (data_size > remaining_capacity) return ATTEMPTED_OVERFLOW;
+
+    buffer->write_cursor = memcpy(buffer->write_cursor, data, data_size);
+
     return SUCCESS;
 }
