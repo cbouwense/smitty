@@ -4,6 +4,11 @@
 
 #define BUFFER_DEFAULT_CAPACITY 1024
 
+typedef enum {
+    SUCCESS = 0,
+    FAILURE = 1
+} ReturnCode;
+
 // TODO: should these pointers reall be a char? or a void? or something else?
 typedef struct buffer {
     char *data;
@@ -26,8 +31,8 @@ Buffer *buffer_new_default();
 
 Buffer *buffer_new(size_t capacity);
 
-void buffer_clear(Buffer *buffer);
+ReturnCode buffer_clear(Buffer *buffer);
 
-void buffer_write(Buffer *buffer, char *data, size_t size);
+ReturnCode buffer_write(Buffer *buffer, char *data, size_t size);
 
-void buffer_read(Buffer *buffer, size_t size);
+ReturnCode buffer_read(Buffer *buffer, size_t size);

@@ -54,6 +54,19 @@ smitty_test_result it_returns_null_when_buffer_created_with_zero_capacity() {
     free(buffer);
 }
 
+smitty_test_result it_moves_read_cursor_to_the_right_when_data_is_written() {
+    Buffer *buffer = buffer_new(42);
+    char *data = "Hello, world!";
+    size_t data_size = strlen(data);
+
+    ReturnCode result = buffer_write(buffer, data, data_size);
+
+    expect(result == SUCCESS);
+    // expect(buffer->read_cursor == buffer->data + data_size);
+
+    free(buffer);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
@@ -65,6 +78,7 @@ smitty_register_tests(
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
     smitty_test_as_name_and_callback(it_creates_a_buffer_with_the_specified_capacity),
     smitty_test_as_name_and_callback(it_returns_null_when_buffer_created_with_zero_capacity),
+    smitty_test_as_name_and_callback(it_moves_read_cursor_to_the_right_when_data_is_written),
 )
 
 smitty_run_test_suite()

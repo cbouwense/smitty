@@ -17,3 +17,7 @@ Buffer *buffer_new(size_t capacity) {
 
     return buffer;
 }
+
+ReturnCode buffer_write(Buffer *buffer, char *data, size_t size) {
+    return SUCCESS;
+}
