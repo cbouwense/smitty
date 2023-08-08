@@ -85,7 +85,12 @@ void smitty_run_tests(
 
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
 
-smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[]);
+smitty_test_result smitty_run_test(
+    const char *name,
+    smitty_test_case_info tests[],
+    void (*before_each)(),
+    void (*after_each)()
+);
 
 char *smitty_test_result_to_string(smitty_test_result result);
 
@@ -113,4 +118,12 @@ void set_output_color_to_red();
 
 void set_output_style_to_bold();
 
-void reset_output_color();
+void reset_output_style();
+
+void print_green(const char *string);
+
+void print_red(const char *string);
+
+void print_green_bold(const char *string);
+
+void print_red_bold(const char *string);

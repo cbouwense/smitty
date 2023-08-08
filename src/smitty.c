@@ -23,13 +23,23 @@ void smitty_run_tests(
     // The maximum amount of failures is the total amount of tests, so allocate that much space.
     const char *failed_test_names[total_test_count];
 
-    // Run each test and record results.
+    // Run each test, its hooks, and record results.
     for (int i = 0; tests[i].name != NULL; i++) {
+
+        // TODO: maybe we should have a way to see if the after_each function failed?
+        // Run before_each if we got one.
         if (before_each != NULL) before_each();
 
         const char *test_name = tests[i].name;
-        const smitty_test_result result = smitty_run_test(tests[i].name, tests);
+        const smitty_test_result result = smitty_run_test(
+            tests[i].name, 
+            tests,
+            before_each,
+            after_each
+        );
         
+        // TODO: maybe we should have a way to see if the after_each function failed?
+        // Run after_each if we got one.
         if (after_each != NULL) after_each();
 
         switch (result) {
@@ -51,61 +61,54 @@ void smitty_run_tests(
 
     // Display results.
     if (failed_test_count == 0) {
-        set_output_color_to_green();
-        set_output_style_to_bold();
-        printf("All tests passed!\n\n");
-        reset_output_color();
+        print_green_bold("All tests passed!\n\n");
     } else if (failed_test_count != total_test_count) {
-        set_output_color_to_red();
-        set_output_style_to_bold();
-        printf("Some tests failed!\n\n");
-        reset_output_color();
+        print_red_bold("Some tests failed!\n\n");
 
         for(int i = 0; i < failed_test_count; i++) {
             set_output_color_to_red();
             printf("%s\n\n", failed_test_names[i]);
-            reset_output_color();
+            reset_output_style();
         }
     } else { // Every test failed
-        set_output_color_to_red();
-        set_output_style_to_bold();
-        printf("All tests failed!\n\n");
-        reset_output_color();
+        print_red("All tests failed!\n\n");
 
         for(int i = 0; i < failed_test_count; i++) {
             set_output_color_to_red();
             printf("%s\n\n", failed_test_names[i]);
-            reset_output_color();
+            reset_output_style();
         }
     }
 
     printf("Total tests:\t");
     set_output_style_to_bold();
     printf("%d\n", total_test_count);
-    reset_output_color();
+    reset_output_style();
+
+    print_green("Passed tests:\t");
 
     set_output_color_to_green();
-    printf("Passed tests:\t");
     set_output_style_to_bold();
     printf("%d ", passed_test_count);
-    reset_output_color();
+    reset_output_style();
+
     set_output_color_to_green();
     printf("(%d%%)\n", (passed_test_count * 100) / total_test_count);
 
+    print_red("Failed tests:\t");
     set_output_color_to_red();
-    printf("Failed tests:\t");
-    set_output_style_to_bold();
     printf("%d ", total_test_count - passed_test_count);
-    reset_output_color();
+
     printf("(%d%%)\n\n", ((total_test_count - passed_test_count) * 100) / total_test_count);
-    
+    reset_output_style();
+
     clock_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
     printf("Time spent:\t");
     set_output_style_to_bold();
     print_most_readable_time(time_spent);
-    reset_output_color();
+    reset_output_style();
 }
 
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))() {
@@ -119,10 +122,19 @@ smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info t
     return NULL;
 }
 
-smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[]) {
+smitty_test_result smitty_run_test(
+    const char *name,
+    smitty_test_case_info tests[],
+    void (*before_each)(),
+    void (*after_each)()
+) {
     smitty_test_result (*test_case)() = find_test_by_name(name, tests);
 
+    if (before_each != NULL) before_each();
+    
     const smitty_test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
+
+    if (after_each != NULL) after_each();
 
     switch (result) {
         case TEST_PASS:
@@ -203,6 +215,32 @@ void set_output_style_to_bold() {
     printf("\033[1m");
 }
 
-void reset_output_color() {
+void reset_output_style() {
     printf("\033[0m");
+}
+
+void print_green(const char *string) {
+    set_output_color_to_green();
+    printf("%s", string);
+    reset_output_style();
+}
+
+void print_red(const char *string) {
+    set_output_color_to_red();
+    printf("%s", string);
+    reset_output_style();
+}
+
+void print_green_bold(const char *string) {
+    set_output_color_to_green();
+    set_output_style_to_bold();
+    printf("%s", string);
+    reset_output_style();
+}
+
+void print_red_bold(const char *string) {
+    set_output_color_to_red();
+    set_output_style_to_bold();
+    printf("%s", string);
+    reset_output_style();
 }

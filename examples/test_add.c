@@ -2,11 +2,11 @@
 #include "add.h"
 
 void before_each() {
-    printf("This runs before each test asdfa\n");
+    // printf("This runs before each test asdfa\n");
 }
 
 void after_each() {
-    printf("This runs after each test\n");
+    // printf("This runs after each test\n");
 }
 
 smitty_test(it_can_add_two_positive_integers, {
