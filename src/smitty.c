@@ -137,10 +137,9 @@ smitty_test_result smitty_run_test(
     if (after_each != NULL) after_each();
 
     switch (result) {
-        case TEST_PASS:
+        case TEST_PASS:    
         default:
             return TEST_PASS;
-            
         case TEST_FAIL:
         case TEST_NOT_FOUND:
             return TEST_FAIL;
