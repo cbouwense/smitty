@@ -34,6 +34,13 @@ typedef struct {
 // Macros
 //--------------------------------------------------------------------------------------------------
 
+#define smitty_test(name, body) \
+    smitty_test_result name() { \
+        int failed_expect_count = 0; \
+        body \
+        return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
+    }
+
 #define smitty_test_as_name_and_callback(name) {#name, name}
 
 #define smitty_register_tests(...) \
@@ -66,7 +73,8 @@ typedef struct {
         return 0; \
     }
 
-#define expect_equal(actual, expected) expect_equal_internal(actual, expected, __func__, __FILE__, __LINE__)
+#define expect_equal(actual, expected) \
+    failed_expect_count += expect_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL == EXPECT_FAIL ? 1 : 0;
 
 //--------------------------------------------------------------------------------------------------
 // Expects

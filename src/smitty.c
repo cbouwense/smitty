@@ -1,5 +1,7 @@
 #include "smitty.h"
 
+#define SMITTY_VERBOSE
+
 //--------------------------------------------------------------------------------------------------
 // Expects
 //--------------------------------------------------------------------------------------------------
@@ -120,6 +122,10 @@ smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests
     if (before_each != NULL) before_each();
     
     const smitty_test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
+    // TODO: we could even have a "simple" mode where it only says "All passed" or "Some failed" with the failures.
+    #ifdef SMITTY_VERBOSE
+    printf("%s: %s\n", name, smitty_test_result_to_string(result));
+    #endif
 
     if (after_each != NULL) after_each();
 

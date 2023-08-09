@@ -1,13 +1,13 @@
 #include "../src/smitty.h"
 #include "buffer.h"
 
-smitty_test_result it_creates_a_default_buffer_with_1024_bytes_of_capacity() {
+smitty_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity, {
     Buffer *buffer = buffer_new_default();
 
     expect_equal(buffer->capacity,  1024);
 
     free(buffer);
-}
+});
 
 // TODO: we need more expects for these to work
 // smitty_test_result it_creates_a_default_buffer_with_a_non_null_data_pointer() {
