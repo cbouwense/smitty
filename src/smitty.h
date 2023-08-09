@@ -26,21 +26,13 @@ typedef enum {
 typedef smitty_test_result (*test_case_ptr)();
 
 typedef struct {
-    const char *name;
-    test_case_ptr test_case;
+    const char    *name;
+    test_case_ptr  test_case;
 } smitty_test_case_info;
 
 //--------------------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------------------
-
-
-/*
- * If an assertion is true, the test continues. If it fails, the test returns TEST_FAIL. This means
- * that the first assertion to fail will cause the test to stop. It would be nicer if the entire
- * test ran, all the expects were evaluated, and then the test result showed each expect.
- */
-#define expect(assertion) if (!(assertion)) return TEST_FAIL
 
 #define smitty_test_as_name_and_callback(name) {#name, name}
 
@@ -72,12 +64,6 @@ typedef struct {
     int main() { \
         smitty_run_tests(tests, before_each, after_each); \
         return 0; \
-    }
-
-#define smitty_test(test_function_pointer, test_body) \
-    smitty_test_result test_function_pointer() { \
-        test_body \
-        return TEST_PASS; \
     }
 
 #define expect_equal(actual, expected) expect_equal_internal(actual, expected, __func__, __FILE__, __LINE__)
