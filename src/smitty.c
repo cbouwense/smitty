@@ -4,13 +4,23 @@
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-smitty_expect_result expect_int_equal(const int expected, const int actual) {
-    if (expected != actual) {
-        set_output_color_to_green();
-        printf("Expected: %d\n", expected);
+smitty_expect_result expect_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
+    if (actual != expected) {
+        set_output_style_to_bold();
         set_output_color_to_red();
-        printf("Actual:\t  %d\n\n", actual);
+        printf(">-- FAIL --> ");
         reset_output_style();
+        
+        set_output_color_to_red();
+        printf("%s", test_name);
+        reset_output_style();
+
+        printf(" | (%s - line %d)\n\n", file, line);
+
+        set_output_color_to_red();
+        printf("Actual:\t  %d\n", actual);
+        reset_output_style();
+        printf("Expected: %d\n\n", expected);
 
         return EXPECT_FAIL;
     }
@@ -22,9 +32,8 @@ smitty_expect_result expect_int_equal(const int expected, const int actual) {
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void internal_smitty_test( const char *test_description, smitty_test_result (*test_body)(), const char *file, const int line) {
+void internal_smitty_test(const char *test_description, smitty_test_result (*test_body)(), const char *file, const int line) {
     smitty_test_result result = test_body();
-    printf("%s: %s\n", test_description, smitty_test_result_to_string(result));
 }
 
 void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
@@ -56,8 +65,6 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
             before_each,
             after_each
         );
-        
-        printf("result: %s\n", smitty_test_result_to_string(result));
 
         // TODO: maybe we should have a way to see if the after_each function failed?
         // Run after_each if we got one.
@@ -82,26 +89,27 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     }
 
     // Display results.
-    if (failed_test_count == 0) {
-        print_green_bold("All tests passed!\n\n");
-    } else if (failed_test_count != total_test_count) {
-        print_red_bold("Some tests failed!\n\n");
+    // if (failed_test_count == 0) {
+    //     print_green_bold("All tests passed!\n\n");
+    // } else if (failed_test_count != total_test_count) {
+    //     print_red_bold("Some tests failed!\n\n");
 
-        for(int i = 0; i < failed_test_count; i++) {
-            set_output_color_to_red();
-            printf("%s\n\n", failed_test_names[i]);
-            reset_output_style();
-        }
-    } else { // Every test failed
-        print_red("All tests failed!\n\n");
+    //     for(int i = 0; i < failed_test_count; i++) {
+    //         set_output_color_to_red();
+    //         printf("%s\n\n", failed_test_names[i]);
+    //         reset_output_style();
+    //     }
+    // } else { // Every test failed
+    //     print_red("All tests failed!\n\n");
 
-        for(int i = 0; i < failed_test_count; i++) {
-            set_output_color_to_red();
-            printf("%s\n\n", failed_test_names[i]);
-            reset_output_style();
-        }
-    }
+    //     for(int i = 0; i < failed_test_count; i++) {
+    //         set_output_color_to_red();
+    //         printf("%s\n\n", failed_test_names[i]);
+    //         reset_output_style();
+    //     }
+    // }
 
+    printf("================================\n");
     printf("Total tests:\t");
     set_output_style_to_bold();
     printf("%d\n", total_test_count);
@@ -121,16 +129,18 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     set_output_color_to_red();
     printf("%d ", total_test_count - passed_test_count);
 
-    printf("(%d%%)\n\n", ((total_test_count - passed_test_count) * 100) / total_test_count);
+    printf("(%d%%)\n", ((total_test_count - passed_test_count) * 100) / total_test_count);
     reset_output_style();
 
     clock_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
 
+    printf("--------------------------------\n");
     printf("Time spent:\t");
     set_output_style_to_bold();
     print_most_readable_time(time_spent);
     reset_output_style();
+    printf("================================\n");
 }
 
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))() {
