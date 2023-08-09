@@ -11,6 +11,11 @@
 //--------------------------------------------------------------------------------------------------
 
 typedef enum {
+    EXPECT_PASS,
+    EXPECT_FAIL,
+} smitty_expect_result;
+
+typedef enum {
     TEST_PASS,
     TEST_FAIL,
     TEST_NOT_FOUND,
@@ -34,6 +39,8 @@ typedef struct {
  * test ran, all the expects were evaluated, and then the test result showed each expect.
  */
 #define expect(assertion) if (!(assertion)) return TEST_FAIL
+
+smitty_expect_result expect_int_equal(const int expected, const int actual);
 
 #define smitty_test_as_name_and_callback(name) {#name, name}
 
@@ -67,11 +74,7 @@ typedef struct {
         return 0; \
     }
 
-#define smitty_test(description, body) \
-    smitty_test_result description() { \
-        body \
-        return TEST_PASS; \
-    }
+#define smitty_test(function_pointer) internal_smitty_test(#function_pointer, function_pointer, __FILE__, __LINE__)
 
 //--------------------------------------------------------------------------------------------------
 // Test runner core

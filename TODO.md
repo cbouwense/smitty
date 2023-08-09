@@ -1,5 +1,6 @@
 # Seems easy
 - make readme
+- don't use macros for the smitty run test suite commands
 
 # Doesn't seem too hard
 - report expectation failure intelligently

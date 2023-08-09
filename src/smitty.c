@@ -4,11 +4,21 @@
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(
-    smitty_test_case_info tests[],
-    void (*before_each)(),
-    void (*after_each)() 
-) {
+smitty_expect_result expect_int_equal(const int expected, const int actual) {
+    if (expected != actual) {
+        set_output_color_to_green();
+        printf("Expected: %d\n", expected);
+        set_output_color_to_red();
+        printf("Actual:\t  %d\n\n", actual);
+        reset_output_style();
+
+        return EXPECT_FAIL;
+    }
+    
+    return EXPECT_PASS;
+}
+
+void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -38,12 +48,15 @@ void smitty_run_tests(
             after_each
         );
         
+        printf("result: %s\n", smitty_test_result_to_string(result));
+
         // TODO: maybe we should have a way to see if the after_each function failed?
         // Run after_each if we got one.
         if (after_each != NULL) after_each();
 
         switch (result) {
             case TEST_PASS:
+            default:
                 passed_test_count++;
                 break;
 
@@ -122,11 +135,11 @@ smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info t
     return NULL;
 }
 
-smitty_test_result smitty_run_test(
-    const char *name,
-    smitty_test_case_info tests[],
-    void (*before_each)(),
-    void (*after_each)()
+smitty_test_result smitty_run_test(           
+    const char             *name,
+    smitty_test_case_info   tests[],
+    void                  (*before_each)(),
+    void                  (*after_each)()
 ) {
     smitty_test_result (*test_case)() = find_test_by_name(name, tests);
 
