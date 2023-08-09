@@ -33,14 +33,13 @@ typedef struct {
 // Macros
 //--------------------------------------------------------------------------------------------------
 
+
 /*
  * If an assertion is true, the test continues. If it fails, the test returns TEST_FAIL. This means
  * that the first assertion to fail will cause the test to stop. It would be nicer if the entire
  * test ran, all the expects were evaluated, and then the test result showed each expect.
  */
 #define expect(assertion) if (!(assertion)) return TEST_FAIL
-
-smitty_expect_result expect_int_equal(const int expected, const int actual);
 
 #define smitty_test_as_name_and_callback(name) {#name, name}
 
@@ -77,23 +76,22 @@ smitty_expect_result expect_int_equal(const int expected, const int actual);
 #define smitty_test(function_pointer) internal_smitty_test(#function_pointer, function_pointer, __FILE__, __LINE__)
 
 //--------------------------------------------------------------------------------------------------
+// Expects
+//--------------------------------------------------------------------------------------------------
+
+smitty_expect_result expect_int_equal(const int expected, const int actual);
+
+//--------------------------------------------------------------------------------------------------
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(
-    smitty_test_case_info tests[],
-    void (*before_each)(),
-    void (*after_each)()
-);
+void internal_smitty_test(const char *name, test_case_ptr test_case, const char *file, const int line);
+
+void smitty_run_tests(smitty_test_case_info tests[],void (*before_each)(),void (*after_each)());
 
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
 
-smitty_test_result smitty_run_test(
-    const char *name,
-    smitty_test_case_info tests[],
-    void (*before_each)(),
-    void (*after_each)()
-);
+smitty_test_result smitty_run_test( const char *name, smitty_test_case_info tests[], void (*before_each)(), void (*after_each)());
 
 char *smitty_test_result_to_string(smitty_test_result result);
 

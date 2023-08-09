@@ -13,16 +13,6 @@ smitty_test_result it_can_run_expect_equal() {
     expect_int_equal(1, 2);
 }
 
-void internal_smitty_test(
-    char                *test_description,
-    smitty_test_result (*test_body)(),
-    char                *file,
-    int                  line
-) {
-    smitty_test_result result = test_body();
-    printf("%s: %s\n", test_description, smitty_test_result_to_string(result));
-}
-
 int main() {
     smitty_test(it_can_run_expect_equal);
 

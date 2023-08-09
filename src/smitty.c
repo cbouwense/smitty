@@ -1,7 +1,7 @@
 #include "smitty.h"
 
 //--------------------------------------------------------------------------------------------------
-// Test runner core
+// Expects
 //--------------------------------------------------------------------------------------------------
 
 smitty_expect_result expect_int_equal(const int expected, const int actual) {
@@ -14,8 +14,17 @@ smitty_expect_result expect_int_equal(const int expected, const int actual) {
 
         return EXPECT_FAIL;
     }
-    
+
     return EXPECT_PASS;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Test runner core
+//--------------------------------------------------------------------------------------------------
+
+void internal_smitty_test( const char *test_description, smitty_test_result (*test_body)(), const char *file, const int line) {
+    smitty_test_result result = test_body();
+    printf("%s: %s\n", test_description, smitty_test_result_to_string(result));
 }
 
 void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
@@ -135,12 +144,7 @@ smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info t
     return NULL;
 }
 
-smitty_test_result smitty_run_test(           
-    const char             *name,
-    smitty_test_case_info   tests[],
-    void                  (*before_each)(),
-    void                  (*after_each)()
-) {
+smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
     smitty_test_result (*test_case)() = find_test_by_name(name, tests);
 
     if (before_each != NULL) before_each();
