@@ -18,14 +18,15 @@ smitty_test_result it_can_add_a_positive_and_a_negative_integer() {
 }
 
 smitty_test_result is_this_bug_still_around() {
-    expect_equal(add(-10, 23), 13);
-    expect_equal(add(-2, 3), 2);
+    expect_equal(add(-10, 23), 43);
+    expect_equal(add(-2, 3),   2);
 }
 
 //--------------------------------------------------------------------------------------------------
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
+// TODO: would be nice to do something like smitty_register_and_run_tests
 smitty_register_tests(
     smitty_test_as_name_and_callback(it_can_add_two_positive_integers),
     smitty_test_as_name_and_callback(it_can_add_two_negative_integers),
