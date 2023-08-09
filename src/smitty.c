@@ -32,10 +32,6 @@ smitty_expect_result expect_equal_internal(const int actual, const int expected,
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void internal_smitty_test(const char *test_description, smitty_test_result (*test_body)(), const char *file, const int line) {
-    smitty_test_result result = test_body();
-}
-
 void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
     clock_t start = clock();
 

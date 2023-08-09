@@ -73,7 +73,11 @@ typedef struct {
         return 0; \
     }
 
-#define smitty_test(function_pointer) internal_smitty_test(#function_pointer, function_pointer, __FILE__, __LINE__)
+#define smitty_test(test_function_pointer, test_body) \
+    smitty_test_result test_function_pointer() { \
+        test_body \
+        return TEST_PASS; \
+    }
 
 #define expect_equal(actual, expected) expect_equal_internal(actual, expected, __func__, __FILE__, __LINE__)
 
@@ -86,8 +90,6 @@ smitty_expect_result expect_equal_internal(const int expected, const int actual,
 //--------------------------------------------------------------------------------------------------
 // Test runner core
 //--------------------------------------------------------------------------------------------------
-
-void internal_smitty_test(const char *name, test_case_ptr test_case, const char *file, const int line);
 
 void smitty_run_tests(smitty_test_case_info tests[],void (*before_each)(),void (*after_each)());
 

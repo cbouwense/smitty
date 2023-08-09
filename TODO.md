@@ -1,9 +1,8 @@
 # Seems easy
 - make readme
-- don't use macros for the smitty run test suite commands
+- don't use macros for the smitty run test suite commands?
 
 # Doesn't seem too hard
-- report expectation failure intelligently
 - some sorta opts struct for smitty_run_test_suite to add hooks
 
 # Seems hard
