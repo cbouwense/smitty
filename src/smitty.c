@@ -6,10 +6,7 @@
 
 smitty_expect_result expect_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
     if (actual != expected) {
-        set_output_style_to_bold();
-        set_output_color_to_red();
-        printf(">-- FAIL --> ");
-        reset_output_style();
+        print_red_bold(">-- FAIL --> ");
         
         set_output_color_to_red();
         printf("%s", test_name);
