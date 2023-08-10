@@ -23,14 +23,8 @@ typedef enum {
     TEST_NOT_FOUND,
 } smitty_test_result;
 
-// A function pointer to a function that returns a smitty_test_result, named test_case_ptr.
-typedef smitty_test_result (*test_case_ptr)();
-
-// TODO: Do I even use this?
-typedef struct {
-    const char    *name;
-    test_case_ptr  test_case;
-} smitty_test_case_info;
+// A function pointer to a function that returns a smitty_test_result, named smitty_test_case_func.
+typedef smitty_test_result (*smitty_test_case_func)();
 
 //--------------------------------------------------------------------------------------------------
 // Macros
@@ -43,17 +37,14 @@ typedef struct {
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
     }
 
-// Create a Record mapping test case name to function pointer
-#define smitty_register(name) {#name, name}
+#define smitty_test_case_name(name) #name
 
-#define smitty_register_tests(...) \
-    smitty_test_case_info tests[] = { \
-        __VA_ARGS__ \
-        {NULL, NULL} \
-    };
-
-#define smitty_run_test_suite() \
+#define smitty_register_and_run_tests(...) \
     int main() { \
+        smitty_test_case_func tests[] = { \
+            __VA_ARGS__ \
+            NULL \
+        }; \
         smitty_run_tests(tests, NULL, NULL); \
         return 0; \
     }
@@ -102,9 +93,8 @@ smitty_expect_result expect_pointer_equal_internal(const void *actual, const voi
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(smitty_test_case_info tests[],void (*before_each)(),void (*after_each)());
-smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
-smitty_test_result smitty_run_test( const char *name, smitty_test_case_info tests[], void (*before_each)(), void (*after_each)());
+void smitty_run_tests(smitty_test_case_func tests[],void (*before_each)(),void (*after_each)());
+smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)());
 
 //--------------------------------------------------------------------------------------------------
 // Test utilities

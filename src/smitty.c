@@ -87,7 +87,7 @@ smitty_expect_result expect_pointer_equal_internal(const void *actual, const voi
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
+void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void (*after_each)()) {
     clock_t start = clock();
 
     int passed_test_count = 0;
@@ -95,7 +95,7 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     int total_test_count = 0;
 
     // Count the number of tests, assuming that the tests array is null terminated.
-    for (int i = 0; tests[i].name != NULL; i++) {
+    for (int i = 0; tests[i] != NULL; i++) {
         total_test_count++;
     }
 
@@ -103,16 +103,15 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     const char *failed_test_names[total_test_count];
 
     // Run each test, its hooks, and record results.
-    for (int i = 0; tests[i].name != NULL; i++) {
+    for (int i = 0; tests[i] != NULL; i++) {
 
         // TODO: maybe we should have a way to see if the before_each function failed?
         // Run before_each if we have one.
         if (before_each != NULL) before_each();
 
-        const char *test_name = tests[i].name;
+        const char *test_name = smitty_test_case_name(tests[i]);
         const smitty_test_result result = smitty_run_test(
-            tests[i].name, 
-            tests,
+            tests[i],
             before_each,
             after_each
         );
@@ -164,23 +163,10 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     printf("================================\n");
 }
 
-smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))() {
-    for (int i = 0; tests[i].name != NULL; i++) {
-        if (strcmp(name, tests[i].name) == 0) {
-            return tests[i].test_case;
-        }
-    }
-
-    printf("Test not found: %s\n", name);
-    return NULL;
-}
-
-smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests[], void (*before_each)(), void (*after_each)()) {
-    smitty_test_result (*test_case)() = find_test_by_name(name, tests);
-
+smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)()) {
     if (before_each != NULL) before_each();
     
-    const smitty_test_result result = test_case == NULL ? TEST_NOT_FOUND : test_case();
+    const smitty_test_result result = test == NULL ? TEST_NOT_FOUND : test();
     // TODO: we could even have a "simple" mode where it only says "All passed" or "Some failed" with the failures.
     #ifdef SMITTY_VERBOSE
     printf("%s: %s\n", name, smitty_test_result_to_string(result));

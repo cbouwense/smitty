@@ -107,16 +107,14 @@ smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-smitty_register_tests(
-    smitty_register(it_creates_a_default_buffer_with_1024_bytes_of_capacity),
-    smitty_register(it_creates_a_default_buffer_with_a_non_null_pointer_to_its_data),
-    smitty_register(it_returns_null_when_scrump_buffer_created_with_zero_capacity),
-    smitty_register(it_returns_attempted_overflow_when_a_user_attempts_an_overflow),
-    smitty_register(it_writes_the_data_to_the_buffer),
-    smitty_register(it_writes_the_data_to_the_buffer_when_the_size_exactly_equals_remaining_capacity),
-    smitty_register(it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity),
-    smitty_register(it_returns_attempted_read_overflow_when_too_many_read_bytes_requested),
-    smitty_register(it_returns_data_when_there_is_no_attempted_read_overflow),
+smitty_register_and_run_tests(
+    it_creates_a_default_buffer_with_1024_bytes_of_capacity,
+    it_creates_a_default_buffer_with_a_non_null_pointer_to_its_data,
+    it_returns_null_when_scrump_buffer_created_with_zero_capacity,
+    it_returns_attempted_overflow_when_a_user_attempts_an_overflow,
+    it_writes_the_data_to_the_buffer,
+    it_writes_the_data_to_the_buffer_when_the_size_exactly_equals_remaining_capacity,
+    it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity,
+    it_returns_attempted_read_overflow_when_too_many_read_bytes_requested,
+    it_returns_data_when_there_is_no_attempted_read_overflow,
 );
-
-smitty_run_test_suite();

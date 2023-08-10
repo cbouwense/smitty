@@ -21,11 +21,9 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-smitty_register_tests(
-    smitty_register(it_can_add_two_positive_integers),
-    smitty_register(it_can_add_two_negative_integers),
-    smitty_register(it_can_add_two_numbers_whose_sum_is_zero),
-    smitty_register(it_can_add_a_positive_and_a_negative_integer),
-)
-
-smitty_run_test_suite()
+smitty_register_and_run_tests(
+    it_can_add_two_positive_integers,
+    it_can_add_two_negative_integers,
+    it_can_add_two_numbers_whose_sum_is_zero,
+    it_can_add_a_positive_and_a_negative_integer,
+);
