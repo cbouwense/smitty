@@ -9,7 +9,8 @@
 typedef enum {
     SUCCESS = 0,
     FAILURE = 1,
-    ATTEMPTED_OVERFLOW = 2
+    ATTEMPTED_WRITE_OVERFLOW = 2,
+    ATTEMPTED_READ_OVERFLOW = 3,
 } ReturnCode;
 
 typedef struct buffer {
@@ -30,4 +31,4 @@ ReturnCode buffer_clear(ScrumpBuffer *buffer);
 
 ReturnCode buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
 
-ReturnCode buffer_read(ScrumpBuffer *buffer, size_t size);
+ReturnCode buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);
