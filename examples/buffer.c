@@ -19,9 +19,10 @@ ScrumpBuffer *buffer_create(size_t capacity) {
 
 ReturnCode buffer_write(ScrumpBuffer *buffer, void *data, size_t size) {
     const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
+    printf("remaining_capacity: %zu\n", remaining_capacity);
     if (size > remaining_capacity) return ATTEMPTED_OVERFLOW;
 
-    buffer->write_cursor = memcpy(buffer->write_cursor, data, size);
+    buffer->write_cursor = memcpy(buffer->write_cursor, data, size) + size;
 
     return SUCCESS;
 }

@@ -62,7 +62,34 @@ smitty_test(it_writes_the_data_to_the_buffer, {
     expect_string_equal(buffer->data, data);
 
     free(buffer);
-})
+});
+
+smitty_test(it_writes_the_data_to_the_buffer_when_the_size_exactly_equals_remaining_capacity, {
+    ScrumpBuffer *buffer = buffer_create(13);
+    char *data = "Hello, world!";
+
+    buffer_write(buffer, data, strlen(data));
+
+    expect_string_equal(buffer->data, data);
+
+    free(buffer);
+});
+
+smitty_test(it_returns_attempted_overflow_when_read_cursor_is_at_capacity, {
+    ScrumpBuffer *buffer = buffer_create(5);
+    char *data = "Hello";
+
+    // Fill up the buffer.
+    buffer_write(buffer, data, strlen(data));
+    
+    // Attempt to add one more byte.
+    char one_more_byte = 'b';
+    const ReturnCode result = buffer_write(buffer, &one_more_byte, 1);
+
+    expect_int_equal(result, ATTEMPTED_OVERFLOW);
+
+    free(buffer);
+});
 
 //--------------------------------------------------------------------------------------------------
 // Smitty boilerplate
@@ -76,6 +103,8 @@ smitty_register_tests(
     smitty_test_as_name_and_callback(it_returns_null_when_buffer_created_with_zero_capacity),
     smitty_test_as_name_and_callback(it_returns_attempted_overflow_when_a_user_attempts_an_overflow),
     smitty_test_as_name_and_callback(it_writes_the_data_to_the_buffer),
+    smitty_test_as_name_and_callback(it_writes_the_data_to_the_buffer_when_the_size_exactly_equals_remaining_capacity),
+    smitty_test_as_name_and_callback(it_returns_attempted_overflow_when_read_cursor_is_at_capacity),
 );
 
 smitty_run_test_suite();
