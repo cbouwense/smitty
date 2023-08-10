@@ -1,13 +1,13 @@
 #include "buffer.h"
 
-Buffer *buffer_create_default() {
+ScrumpBuffer *buffer_create_default() {
     return buffer_create(BUFFER_DEFAULT_CAPACITY);
 }
 
-Buffer *buffer_create(size_t capacity) {
+ScrumpBuffer *buffer_create(size_t capacity) {
     if (capacity == 0) return NULL;
 
-    Buffer *buffer = malloc(sizeof(Buffer));
+    ScrumpBuffer *buffer = malloc(sizeof(ScrumpBuffer));
 
     buffer->data = malloc(capacity);
     buffer->capacity = capacity;
@@ -17,12 +17,11 @@ Buffer *buffer_create(size_t capacity) {
     return buffer;
 }
 
-ReturnCode buffer_write(Buffer *buffer, char *data) {
-    const size_t data_size = strlen(data);
+ReturnCode buffer_write(ScrumpBuffer *buffer, void *data, size_t size) {
     const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
-    if (data_size > remaining_capacity) return ATTEMPTED_OVERFLOW;
+    if (size > remaining_capacity) return ATTEMPTED_OVERFLOW;
 
-    buffer->write_cursor = memcpy(buffer->write_cursor, data, data_size);
+    buffer->write_cursor = memcpy(buffer->write_cursor, data, size);
 
     return SUCCESS;
 }

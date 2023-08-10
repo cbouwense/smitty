@@ -2,7 +2,7 @@
 #include "buffer.h"
 
 smitty_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity, {
-    Buffer *buffer = buffer_create_default();
+    ScrumpBuffer *buffer = buffer_create_default();
 
     expect_int_equal(buffer->capacity,  1024);
 
@@ -10,7 +10,7 @@ smitty_test(it_creates_a_default_buffer_with_1024_bytes_of_capacity, {
 });
 
 smitty_test(it_creates_a_default_buffer_with_a_non_null_pointer_to_its_data, {
-    Buffer *buffer = buffer_create_default();
+    ScrumpBuffer *buffer = buffer_create_default();
 
     expect_non_null(buffer->data);
 
@@ -18,7 +18,7 @@ smitty_test(it_creates_a_default_buffer_with_a_non_null_pointer_to_its_data, {
 });
 
 smitty_test(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor, {
-    Buffer *buffer = buffer_create_default();
+    ScrumpBuffer *buffer = buffer_create_default();
 
     expect_pointer_equal(buffer->data, buffer->read_cursor);
     expect_pointer_equal(buffer->data, buffer->write_cursor);
@@ -27,7 +27,7 @@ smitty_test(it_creates_a_default_buffer_with_the_same_address_for_data_read_curs
 });
 
 smitty_test(it_creates_a_buffer_with_the_specified_capacity, {
-    Buffer *buffer = buffer_create(2048);
+    ScrumpBuffer *buffer = buffer_create(2048);
 
     expect_int_equal(buffer->capacity, 2048);
 
@@ -35,7 +35,7 @@ smitty_test(it_creates_a_buffer_with_the_specified_capacity, {
 });
 
 smitty_test(it_returns_null_when_buffer_created_with_zero_capacity, {
-    Buffer *buffer = buffer_create(0);
+    ScrumpBuffer *buffer = buffer_create(0);
 
     expect_null(buffer);
 
@@ -43,10 +43,10 @@ smitty_test(it_returns_null_when_buffer_created_with_zero_capacity, {
 });
 
 smitty_test(it_returns_attempted_overflow_when_a_user_attempts_an_overflow, {
-    Buffer *buffer = buffer_create(3);
+    ScrumpBuffer *buffer = buffer_create(3);
     char *data = "Hello, world!";
 
-    ReturnCode result = buffer_write(buffer, data);
+    ReturnCode result = buffer_write(buffer, data, strlen(data));
 
     expect_int_equal(result, ATTEMPTED_OVERFLOW);
 
@@ -54,10 +54,10 @@ smitty_test(it_returns_attempted_overflow_when_a_user_attempts_an_overflow, {
 });
 
 smitty_test(it_writes_the_data_to_the_buffer, {
-    Buffer *buffer = buffer_create(1024);
+    ScrumpBuffer *buffer = buffer_create(1024);
     char *data = "Hello, world!";
 
-    buffer_write(buffer, data);
+    buffer_write(buffer, data, strlen(data));
 
     expect_string_equal(buffer->data, data);
 

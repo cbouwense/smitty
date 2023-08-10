@@ -11,23 +11,22 @@ typedef enum {
     ATTEMPTED_OVERFLOW = 2
 } ReturnCode;
 
-// TODO: should these pointers reall be a char? or a void? or something else?
 typedef struct buffer {
-    char *data;
+    void *data;
     
     size_t capacity;
     
-    char *read_cursor;
+    void *read_cursor;
     
-    char *write_cursor;
-} Buffer;
+    void *write_cursor;
+} ScrumpBuffer;
 
-Buffer *buffer_create_default();
+ScrumpBuffer *buffer_create_default();
 
-Buffer *buffer_create(size_t capacity);
+ScrumpBuffer *buffer_create(size_t capacity);
 
-ReturnCode buffer_clear(Buffer *buffer);
+ReturnCode buffer_clear(ScrumpBuffer *buffer);
 
-ReturnCode buffer_write(Buffer *buffer, char *data);
+ReturnCode buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
 
-ReturnCode buffer_read(Buffer *buffer, size_t size);
+ReturnCode buffer_read(ScrumpBuffer *buffer, size_t size);

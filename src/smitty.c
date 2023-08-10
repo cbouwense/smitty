@@ -111,7 +111,7 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     int failed_test_count = 0;
     int total_test_count = 0;
 
-    // TODO: it would be cool if we used one of my SafeBuffers for this.
+    // TODO: it would be cool if we used one of my SafeScrumpBuffers for this.
     // Count the number of tests, assuming that the tests array is null terminated.
     for (int i = 0; tests[i].name != NULL; i++) {
         total_test_count++;
