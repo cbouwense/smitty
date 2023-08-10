@@ -34,7 +34,7 @@ ScrumpReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t si
 ScrumpReturnCode scrump_buffer_write_ptr(ScrumpBuffer *buffer, smitty_test_result (*data)());
 
 // ScrumpReturnCode scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);
-ScrumpReturnCode scrump_buffer_read(ScrumpBuffer *buffer, smitty_test_result (*read_buffer)(), size_t size);
+smitty_test_result (*scrump_buffer_read_func_ptr(ScrumpBuffer *buffer, size_t size))();
 
 const char *scrump_return_code_to_string(ScrumpReturnCode code);
 

@@ -56,32 +56,25 @@ ScrumpReturnCode scrump_buffer_write_ptr(ScrumpBuffer *buffer, smitty_test_resul
 
     printf("&read_cursor:\t%p\n", &buffer->read_cursor);
     printf("read_cursor:\t%p\n", buffer->read_cursor);
-    printf("*read_cursor:\t%p\n", *((smitty_test_result (*)())buffer->read_cursor));
     printf("**read_cursor:\t%p\n\n", **((smitty_test_result (**)())buffer->read_cursor));
 
     return SCRUMP_SUCCESS;
 }
 
-ScrumpReturnCode scrump_buffer_read(ScrumpBuffer *buffer, smitty_test_result (*read_buffer)(), size_t size) {
+smitty_test_result (*scrump_buffer_read_func_ptr(ScrumpBuffer *buffer, size_t size))() {
     const size_t read_capacity = buffer->write_cursor - buffer->read_cursor;
-    if (size > read_capacity) return SCRUMP_ATTEMPTED_READ_OVERFLOW;
+    if (size > read_capacity) return NULL;
 
-    printf("$ read_buffer:\t%p\n", read_buffer);
     printf("read_cursor:\t%p\n", buffer->read_cursor);
+    printf("**read_cursor:\t%p\n\n", **((smitty_test_result (**)())buffer->read_cursor));
     printf("write_cursor:\t%p\n", buffer->write_cursor);
     printf("&read_cursor:\t%p\n", &buffer->read_cursor);
     printf("&write_cursor:\t%p\n\n", &buffer->write_cursor);
 
-    memcpy(&read_buffer, buffer->read_cursor, size);
+    const smitty_test_result (*func_ptr)() = **((smitty_test_result (**)())buffer->read_cursor);
     buffer->read_cursor += size;
 
-    printf("$ read_buffer:\t%p\n", read_buffer);
-    read_buffer();
-    printf("&read_cursor:\t%p\n", &buffer->read_cursor);
-    printf("read_cursor:\t%p\n", buffer->read_cursor);
-    printf("**read_cursor:\t%p\n\n", **((smitty_test_result (**)())buffer->read_cursor));
-
-    return SCRUMP_SUCCESS;
+    return func_ptr;
 }
 
 const char *scrump_return_code_to_string(ScrumpReturnCode code) {

@@ -14,14 +14,13 @@ int main() {
     const ScrumpReturnCode write_result = scrump_buffer_write_ptr(test_function_pointer_buffer, it_can_add_two_positive_integers);
     printf("write result:\t%s\n", scrump_return_code_to_string(write_result));
 
-    const smitty_test_result (*read_buffer)() = malloc(8);
-    const ScrumpReturnCode read_result = scrump_buffer_read(test_function_pointer_buffer, read_buffer, 8);
-    smitty_test_result (*naive_test_ptr)() = (smitty_test_result (*)())it_can_add_two_positive_integers;
-    printf("read result:\t%s\n\n", scrump_return_code_to_string(read_result));
-
+    const smitty_test_result (*read_buffer)();
     printf("&read_buffer:\t%p\n", &read_buffer);
-    printf("read_buffer:\t%p\n", read_buffer);
-    printf("*read_buffer:\t%p\n", *read_buffer);
+
+    const smitty_test_result (*read_result)() = scrump_buffer_read_func_ptr(test_function_pointer_buffer, 8);
+
+    printf("read_result:\t%p\n", read_result);
+    read_result();
 
     return 0;
 }
