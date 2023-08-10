@@ -25,6 +25,7 @@ typedef enum {
 // A function pointer to a function that returns a smitty_test_result, named test_case_ptr.
 typedef smitty_test_result (*test_case_ptr)();
 
+// TODO: Do I even use this?
 typedef struct {
     const char    *name;
     test_case_ptr  test_case;
@@ -41,7 +42,7 @@ typedef struct {
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
     }
 
-#define smitty_test_as_name_and_callback(name) {#name, name}
+#define smitty_register(name) {#name, name}
 
 #define smitty_register_tests(...) \
     smitty_test_case_info tests[] = { \

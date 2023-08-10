@@ -23,10 +23,10 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
 
 // TODO: would be nice to do something like smitty_register_and_run_tests
 smitty_register_tests(
-    smitty_test_as_name_and_callback(it_can_add_two_positive_integers),
-    smitty_test_as_name_and_callback(it_can_add_two_negative_integers),
-    smitty_test_as_name_and_callback(it_can_add_two_numbers_whose_sum_is_zero),
-    smitty_test_as_name_and_callback(it_can_add_a_positive_and_a_negative_integer),
+    smitty_register(it_can_add_two_positive_integers),
+    smitty_register(it_can_add_two_negative_integers),
+    smitty_register(it_can_add_two_numbers_whose_sum_is_zero),
+    smitty_register(it_can_add_a_positive_and_a_negative_integer),
 )
 
 smitty_run_test_suite()
