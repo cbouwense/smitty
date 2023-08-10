@@ -21,7 +21,6 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
 // Smitty boilerplate
 //--------------------------------------------------------------------------------------------------
 
-// TODO: would be nice to do something like smitty_register_and_run_tests
 smitty_register_tests(
     smitty_register(it_can_add_two_positive_integers),
     smitty_register(it_can_add_two_negative_integers),

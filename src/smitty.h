@@ -42,6 +42,7 @@ typedef struct {
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
     }
 
+// Create a Record mapping test case name to function pointer
 #define smitty_register(name) {#name, name}
 
 #define smitty_register_tests(...) \
@@ -74,69 +75,51 @@ typedef struct {
         return 0; \
     }
 
-#define expect_int_equal(actual, expected) \
-    failed_expect_count += expect_int_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL == EXPECT_FAIL ? 1 : 0;
-
-#define expect_string_equal(actual, expected) \
-    failed_expect_count += expect_string_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-
-#define expect_true(actual) \
-    failed_expect_count += expect_true_internal(actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-
-#define expect_false(actual) \
-    failed_expect_count += expect_false_internal(actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-
-#define expect_null(actual) \
-    failed_expect_count += expect_null_internal(actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-
-#define expect_non_null(actual) \
-    failed_expect_count += expect_non_null_internal(actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-
-#define expect_pointer_equal(actual, expected) \
-    failed_expect_count += expect_pointer_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define smitty_test_debug_params const char *test_name, const char *file, const int line
 
 //--------------------------------------------------------------------------------------------------
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line);
+#define expect_int_equal(actual, expected)     failed_expect_count += expect_int_equal_internal    (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_string_equal(actual, expected)  failed_expect_count += expect_string_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_true(actual)                    failed_expect_count += expect_true_internal         (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_false(actual)                   failed_expect_count += expect_false_internal        (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_null(actual)                    failed_expect_count += expect_null_internal         (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_non_null(actual)                failed_expect_count += expect_non_null_internal     (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_pointer_equal(actual, expected) failed_expect_count += expect_pointer_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 
-smitty_expect_result expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line);
-
-smitty_expect_result expect_true_internal(const bool actual, const char *test_name, const char *file, const int line);
-
-smitty_expect_result expect_false_internal(const bool actual, const char *test_name, const char *file, const int line);
-
-smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line);
-
-smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line);
-
-smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
+smitty_expect_result expect_int_equal_internal(    const int   actual, const int   expected, smitty_test_debug_params);
+smitty_expect_result expect_string_equal_internal( const char *actual, const char *expected, smitty_test_debug_params);
+smitty_expect_result expect_true_internal(         const bool  actual,                       smitty_test_debug_params);
+smitty_expect_result expect_false_internal(        const bool  actual,                       smitty_test_debug_params);
+smitty_expect_result expect_null_internal(         const void *actual,                       smitty_test_debug_params);
+smitty_expect_result expect_non_null_internal(     const void *actual,                       smitty_test_debug_params);
+smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, smitty_test_debug_params);
 
 //--------------------------------------------------------------------------------------------------
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
 void smitty_run_tests(smitty_test_case_info tests[],void (*before_each)(),void (*after_each)());
-
 smitty_test_result (*find_test_by_name(const char *name, smitty_test_case_info tests[]))();
-
 smitty_test_result smitty_run_test( const char *name, smitty_test_case_info tests[], void (*before_each)(), void (*after_each)());
 
-char *smitty_test_result_to_string(smitty_test_result result);
+//--------------------------------------------------------------------------------------------------
+// Test utilities
+//--------------------------------------------------------------------------------------------------
+
+void smitty_print_test_failure(const char *test_name, const char *file, const int line);
+const char *smitty_test_result_to_string(smitty_test_result result);
 
 //--------------------------------------------------------------------------------------------------
 // Time utilities
 //--------------------------------------------------------------------------------------------------
 
 const double time_in_seconds(double time);
-
 const double time_in_milliseconds(double time);
-
 const double time_in_microseconds(double time);
-
 const double time_in_nanoseconds(double time);
-
 void print_most_readable_time(double time);
 
 //--------------------------------------------------------------------------------------------------

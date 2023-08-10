@@ -6,28 +6,21 @@
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-// TODO: DRY up the error reporting
 smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
-    if (actual != expected) {
-        print_red_bold(">-- FAIL --> ");
-        print_red("%s", test_name);
-        printf(" | (%s - line %d)\n\n", file, line);
+    if (actual == expected) return EXPECT_PASS;
 
-        print_red("Actual:\t  %d\n", actual);
-        printf("Expected: %d\n\n", expected);
+    smitty_print_test_failure(test_name, file, line);
+
+    print_red("Actual:\t  %d\n", actual);
+    printf("Expected: %d\n\n", expected);
 
     return EXPECT_FAIL;
-    }
-
-    return EXPECT_PASS;
 }
 
 smitty_expect_result expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
     if (strcmp(actual, expected) == 0) return EXPECT_PASS;
 
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %s\n", actual);
     printf("Expected: %s\n\n", expected);
@@ -38,9 +31,7 @@ smitty_expect_result expect_string_equal_internal(const char *actual, const char
 smitty_expect_result expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == true) return EXPECT_PASS;
     
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected to be true\n\n");
@@ -51,9 +42,7 @@ smitty_expect_result expect_true_internal(const bool actual, const char *test_na
 smitty_expect_result expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == false) return EXPECT_PASS;
     
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected to be false\n\n");
@@ -64,9 +53,7 @@ smitty_expect_result expect_false_internal(const bool actual, const char *test_n
 smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual == NULL) return EXPECT_PASS;
 
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected: %p\n\n", NULL);
@@ -77,9 +64,7 @@ smitty_expect_result expect_null_internal(const void *actual, const char *test_n
 smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual != NULL) return EXPECT_PASS;
     
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected to be not NULL\n\n");
@@ -90,9 +75,7 @@ smitty_expect_result expect_non_null_internal(const void *actual, const char *te
 smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
     
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
+    smitty_print_test_failure(test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected: %p\n\n", expected);
@@ -217,7 +200,17 @@ smitty_test_result smitty_run_test(const char *name, smitty_test_case_info tests
     }
 }
 
-char *smitty_test_result_to_string(smitty_test_result result) {
+//--------------------------------------------------------------------------------------------------
+// Test utilities
+//--------------------------------------------------------------------------------------------------
+
+void smitty_print_test_failure(const char *test_name, const char *file, const int line) {
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+}
+
+const char *smitty_test_result_to_string(smitty_test_result result) {
     switch (result) {
         case TEST_PASS:
             return "PASS";
