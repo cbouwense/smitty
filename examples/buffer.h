@@ -22,9 +22,9 @@ typedef struct buffer {
     char *write_cursor;
 } Buffer;
 
-Buffer *buffer_new_default();
+Buffer *buffer_create_default();
 
-Buffer *buffer_new(size_t capacity);
+Buffer *buffer_create(size_t capacity);
 
 ReturnCode buffer_clear(Buffer *buffer);
 

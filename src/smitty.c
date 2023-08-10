@@ -6,6 +6,7 @@
 // Expects
 //--------------------------------------------------------------------------------------------------
 
+// TODO: DRY up the error reporting
 smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
     if (actual != expected) {
         print_red_bold(">-- FAIL --> ");
@@ -28,8 +29,8 @@ smitty_expect_result expect_null_internal(const void *actual, const char *test_n
     print_red("%s", test_name);
     printf(" | (%s - line %d)\n\n", file, line);
 
-    print_red("Actual:\t  %d\n", actual);
-    printf("Expected: %p (NULL)\n\n", NULL);
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected: %p\n\n", NULL);
 
     return EXPECT_FAIL;
 }
@@ -54,7 +55,7 @@ smitty_expect_result expect_true_internal(const bool actual, const char *test_na
     print_red("%s", test_name);
     printf(" | (%s - line %d)\n\n", file, line);
 
-    print_red("Actual:\t  %p\n", actual);
+    print_red("Actual:\t  %d\n", actual);
     printf("Expected to be true\n\n");
 
     return EXPECT_FAIL;
@@ -67,7 +68,7 @@ smitty_expect_result expect_false_internal(const bool actual, const char *test_n
     print_red("%s", test_name);
     printf(" | (%s - line %d)\n\n", file, line);
 
-    print_red("Actual:\t  %p\n", actual);
+    print_red("Actual:\t  %d\n", actual);
     printf("Expected to be false\n\n");
 
     return EXPECT_FAIL;

@@ -1,16 +1,15 @@
 #include "buffer.h"
 
-Buffer *buffer_new_default() {
-    return buffer_new(BUFFER_DEFAULT_CAPACITY);
+Buffer *buffer_create_default() {
+    return buffer_create(BUFFER_DEFAULT_CAPACITY);
 }
 
-Buffer *buffer_new(size_t capacity) {
+Buffer *buffer_create(size_t capacity) {
     if (capacity == 0) return NULL;
 
     Buffer *buffer = malloc(sizeof(Buffer));
 
-    // buffer->data = malloc(capacity);
-    buffer->data = NULL;
+    buffer->data = malloc(capacity);
     buffer->capacity = capacity;
     buffer->read_cursor = buffer->data;
     buffer->write_cursor = buffer->data;
