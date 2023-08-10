@@ -7,13 +7,12 @@
 #define BUFFER_DEFAULT_CAPACITY 1024
 
 typedef enum {
-    SUCCESS = 0,
-    FAILURE = 1,
-    ATTEMPTED_WRITE_OVERFLOW = 2,
-    ATTEMPTED_READ_OVERFLOW = 3,
+    SCRUMP_SUCCESS = 0,
+    SCRUMP_ATTEMPTED_WRITE_OVERFLOW = 1,
+    SCRUMP_ATTEMPTED_READ_OVERFLOW = 2,
 } ReturnCode;
 
-typedef struct buffer {
+typedef struct scrumb_buffer {
     void *data;
     
     size_t capacity;
@@ -23,12 +22,10 @@ typedef struct buffer {
     void *write_cursor;
 } ScrumpBuffer;
 
-ScrumpBuffer *buffer_create_default();
+ScrumpBuffer *scrump_scrump_buffer_create_default();
 
-ScrumpBuffer *buffer_create(size_t capacity);
+ScrumpBuffer *scrump_buffer_create(size_t capacity);
 
-ReturnCode buffer_clear(ScrumpBuffer *buffer);
+ReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
 
-ReturnCode buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
-
-ReturnCode buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);
+ReturnCode scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);

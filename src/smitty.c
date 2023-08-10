@@ -16,7 +16,7 @@ smitty_expect_result expect_int_equal_internal(const int actual, const int expec
         print_red("Actual:\t  %d\n", actual);
         printf("Expected: %d\n\n", expected);
 
-        return EXPECT_FAIL;
+    return EXPECT_FAIL;
     }
 
     return EXPECT_PASS;
@@ -111,7 +111,7 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     int failed_test_count = 0;
     int total_test_count = 0;
 
-    // TODO: it would be cool if we used one of my SafeScrumpBuffers for this.
+    // TODO: it would be cool if we used one of my ScrumpBuffers for this.
     // Count the number of tests, assuming that the tests array is null terminated.
     for (int i = 0; tests[i].name != NULL; i++) {
         total_test_count++;
