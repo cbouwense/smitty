@@ -1,6 +1,6 @@
 #include "smitty.h"
 
-// #define SMITTY_VERBOSE
+#define SMITTY_VERBOSE
 
 //--------------------------------------------------------------------------------------------------
 // Expects
