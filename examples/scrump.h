@@ -30,8 +30,8 @@ ScrumpBuffer *scrump_buffer_create(size_t capacity);
 
 ScrumpReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
 
-// ScrumpReturnCode scrump_buffer_write_ptr(ScrumpBuffer *buffer, void *data);
-ScrumpReturnCode scrump_buffer_write_ptr(ScrumpBuffer *buffer, smitty_test_result (*data)());
+// ScrumpReturnCode scrump_buffer_write_func_ptr(ScrumpBuffer *buffer, void *data);
+ScrumpReturnCode scrump_buffer_write_func_ptr(ScrumpBuffer *buffer, smitty_test_result (*data)());
 
 // ScrumpReturnCode scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);
 smitty_test_result (*scrump_buffer_read_func_ptr(ScrumpBuffer *buffer, size_t size))();

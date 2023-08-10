@@ -2,25 +2,29 @@
 #include "add.h"
 #include "scrump.h"
 
-smitty_test_result it_can_add_two_positive_integers() {
-    printf("it_can_add_two_positive_integers()\n");
-}
+int failed_expect_count = 0;
+
+smitty_test(it_can_add_two_positive_integers, {
+    expect_int_equal(add(2, 2), 5);
+});
+
+smitty_test(it_can_add_two_negative_integers, {
+    expect_int_equal(add(-2, -2), -5);
+});
 
 int main() {
-    ScrumpBuffer *test_function_pointer_buffer = scrump_buffer_create_default();
+    ScrumpBuffer *test_case_ptrs = scrump_buffer_create_default();
 
-    scrump_buffer_debug_print(test_function_pointer_buffer);
+    scrump_buffer_write_func_ptr(test_case_ptrs, it_can_add_two_positive_integers);
+    scrump_buffer_write_func_ptr(test_case_ptrs, it_can_add_two_negative_integers);
 
-    const ScrumpReturnCode write_result = scrump_buffer_write_ptr(test_function_pointer_buffer, it_can_add_two_positive_integers);
-    printf("write result:\t%s\n", scrump_return_code_to_string(write_result));
+    const smitty_test_result (*test_case_1)() = scrump_buffer_read_func_ptr(test_case_ptrs, 8);
+    const smitty_test_result (*test_case_2)() = scrump_buffer_read_func_ptr(test_case_ptrs, 8);
 
-    const smitty_test_result (*read_buffer)();
-    printf("&read_buffer:\t%p\n", &read_buffer);
+    test_case_1();
+    test_case_2();
 
-    const smitty_test_result (*read_result)() = scrump_buffer_read_func_ptr(test_function_pointer_buffer, 8);
-
-    printf("read_result:\t%p\n", read_result);
-    read_result();
+    printf("failed_expect_count: %d\n", failed_expect_count);
 
     return 0;
 }

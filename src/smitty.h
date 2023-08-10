@@ -36,9 +36,11 @@ typedef struct {
 
 #define smitty_test(name, body) \
     smitty_test_result name() { \
-        int failed_expect_count = 0; \
         body \
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
+    } \
+    void register(smitty_test_result (*test_case)()) { \
+        scrump_buffer_write(test_case_ptrs, test_case, sizeof(test_case)); \
     }
 
 #define smitty_test_as_name_and_callback(name) {#name, name}
