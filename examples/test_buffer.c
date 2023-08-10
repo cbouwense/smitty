@@ -42,7 +42,7 @@ smitty_test(it_returns_null_when_buffer_created_with_zero_capacity, {
     free(buffer);
 });
 
-smitty_test(it_returns_failure_when_user_attempts_an_overflow, {
+smitty_test(it_returns_attempted_overflow_when_a_user_attempts_an_overflow, {
     Buffer *buffer = buffer_create(3);
     char *data = "Hello, world!";
 
@@ -52,6 +52,17 @@ smitty_test(it_returns_failure_when_user_attempts_an_overflow, {
 
     free(buffer);
 });
+
+smitty_test(it_writes_the_data_to_the_buffer, {
+    Buffer *buffer = buffer_create(1024);
+    char *data = "Hello, world!";
+
+    buffer_write(buffer, data);
+
+    expect_string_equal(buffer->data, data);
+
+    free(buffer);
+})
 
 //--------------------------------------------------------------------------------------------------
 // Smitty boilerplate
@@ -63,7 +74,8 @@ smitty_register_tests(
     smitty_test_as_name_and_callback(it_creates_a_default_buffer_with_the_same_address_for_data_read_cursor_and_write_cursor),
     smitty_test_as_name_and_callback(it_creates_a_buffer_with_the_specified_capacity),
     smitty_test_as_name_and_callback(it_returns_null_when_buffer_created_with_zero_capacity),
-    smitty_test_as_name_and_callback(it_returns_failure_when_user_attempts_an_overflow),
+    smitty_test_as_name_and_callback(it_returns_attempted_overflow_when_a_user_attempts_an_overflow),
+    smitty_test_as_name_and_callback(it_writes_the_data_to_the_buffer),
 );
 
 smitty_run_test_suite();

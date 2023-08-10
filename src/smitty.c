@@ -22,28 +22,15 @@ smitty_expect_result expect_int_equal_internal(const int actual, const int expec
     return EXPECT_PASS;
 }
 
-smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
-    if (actual == NULL) return EXPECT_PASS;
+smitty_expect_result expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
+    if (strcmp(actual, expected) == 0) return EXPECT_PASS;
 
     print_red_bold(">-- FAIL --> ");
     print_red("%s", test_name);
     printf(" | (%s - line %d)\n\n", file, line);
 
-    print_red("Actual:\t  %p\n", actual);
-    printf("Expected: %p\n\n", NULL);
-
-    return EXPECT_FAIL;
-}
-
-smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
-    if (actual != NULL) return EXPECT_PASS;
-    
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
-
-    print_red("Actual:\t  %p\n", actual);
-    printf("Expected to be not NULL\n\n");
+    print_red("Actual:\t  %s\n", actual);
+    printf("Expected: %s\n\n", expected);
 
     return EXPECT_FAIL;
 }
@@ -70,6 +57,32 @@ smitty_expect_result expect_false_internal(const bool actual, const char *test_n
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected to be false\n\n");
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+    if (actual == NULL) return EXPECT_PASS;
+
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected: %p\n\n", NULL);
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+    if (actual != NULL) return EXPECT_PASS;
+    
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected to be not NULL\n\n");
 
     return EXPECT_FAIL;
 }
