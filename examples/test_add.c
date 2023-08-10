@@ -2,19 +2,19 @@
 #include "add.h"
 
 smitty_test(it_can_add_two_positive_integers, {
-    expect_equal(add(2, 3), 5);
+    expect_int_equal(add(2, 2), 4);
 });
 
 smitty_test(it_can_add_two_negative_integers, {
-    expect_equal(add(-2, -3), -5);
+    expect_int_equal(add(-2, -3), -5);
 });
 
 smitty_test(it_can_add_two_numbers_whose_sum_is_zero, {
-    expect_equal(add(-42, 42), 0);
+    expect_int_equal(add(-42, 42), 0);
 });
 
 smitty_test(it_can_add_a_positive_and_a_negative_integer, {
-    expect_equal(add(-2, 3), 1);
+    expect_int_equal(add(-2, 3), 1);
 });
 
 //--------------------------------------------------------------------------------------------------

@@ -9,7 +9,8 @@ Buffer *buffer_new(size_t capacity) {
 
     Buffer *buffer = malloc(sizeof(Buffer));
 
-    buffer->data = malloc(capacity);
+    // buffer->data = malloc(capacity);
+    buffer->data = NULL;
     buffer->capacity = capacity;
     buffer->read_cursor = buffer->data;
     buffer->write_cursor = buffer->data;

@@ -1,12 +1,12 @@
 #include "smitty.h"
 
-#define SMITTY_VERBOSE
+// #define SMITTY_VERBOSE
 
 //--------------------------------------------------------------------------------------------------
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-smitty_expect_result expect_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
+smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
     if (actual != expected) {
         print_red_bold(">-- FAIL --> ");
         print_red("%s", test_name);
@@ -19,6 +19,71 @@ smitty_expect_result expect_equal_internal(const int actual, const int expected,
     }
 
     return EXPECT_PASS;
+}
+
+smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+    if (actual == NULL) return EXPECT_PASS;
+
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %d\n", actual);
+    printf("Expected: %p (NULL)\n\n", NULL);
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+    if (actual != NULL) return EXPECT_PASS;
+    
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected to be not NULL\n\n");
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
+    if (actual == true) return EXPECT_PASS;
+    
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected to be true\n\n");
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
+    if (actual == false) return EXPECT_PASS;
+    
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected to be false\n\n");
+
+    return EXPECT_FAIL;
+}
+
+smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
+    if (actual == expected) return EXPECT_PASS;
+    
+    print_red_bold(">-- FAIL --> ");
+    print_red("%s", test_name);
+    printf(" | (%s - line %d)\n\n", file, line);
+
+    print_red("Actual:\t  %p\n", actual);
+    printf("Expected: %p\n\n", expected);
+
+    return EXPECT_FAIL;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -44,7 +109,7 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     // Run each test, its hooks, and record results.
     for (int i = 0; tests[i].name != NULL; i++) {
 
-        // TODO: maybe we should have a way to see if the after_each function failed?
+        // TODO: maybe we should have a way to see if the before_each function failed?
         // Run before_each if we have one.
         if (before_each != NULL) before_each();
 
