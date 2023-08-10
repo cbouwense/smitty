@@ -160,9 +160,7 @@ void smitty_run_tests(smitty_test_case_info tests[], void (*before_each)(), void
     printf("--------------------------------\n");
     printf("Time spent:\t");
     // TODO: refactor this to use a to string function so we can pass it into our normal print functions.
-    set_output_style_to_bold();
-    print_most_readable_time(time_spent);
-    reset_output_style();
+    print_bold(get_most_readable_time(time_spent));
     printf("================================\n");
 }
 
@@ -227,39 +225,37 @@ const char *smitty_test_result_to_string(smitty_test_result result) {
 // Time utilities
 //--------------------------------------------------------------------------------------------------
 
-const double time_in_seconds(double time) {
-    return time;
+const short time_in_seconds(double time) {
+    // Cast to short to truncate meaningless decimal places.
+    return (short)time;
 }
 
-const double time_in_milliseconds(double time) {
-    return time * 1000;
+const short time_in_milliseconds(double time) {
+    // Cast to short to truncate meaningless decimal places.
+    return (short)(time * 1000);
 }
 
-const double time_in_microseconds(double time) {
-    return time * 1000000;
+const short time_in_microseconds(double time) {
+    // Cast to short to truncate meaningless decimal places.
+    return (short)(time * 1000000);
 }
 
-const double time_in_nanoseconds(double time) {
-    return time * 1000000000;
+const short time_in_nanoseconds(double time) {
+    // Cast to short to truncate meaningless decimal places.
+    return (short)(time * 1000000000);
 }
 
-void print_most_readable_time(double time) {
-    if (time < 0.000001) {
-        printf("%f ns\n", time_in_nanoseconds(time));
-        return;
-    }
-    
-    if (time < 0.001) {
-        printf("%f µs\n", time_in_microseconds(time));
-        return;
-    }
-    
-    if (time < 1) {
-        printf("%f ms\n", time_in_milliseconds(time));
-        return;
-    }
+const char *get_most_readable_time(double time) {
+    static char buffer[42];
 
-    printf("%f s", time_in_seconds(time));
+    if      (time < 0.000001) sprintf(buffer, "%d ns\n", time_in_nanoseconds(time));
+    else if (time < 0.001)    sprintf(buffer, "%d µs\n", time_in_microseconds(time));
+    else if (time < 1)        sprintf(buffer, "%d ms\n", time_in_milliseconds(time));
+    else                      sprintf(buffer, "%d s",    time_in_seconds(time));
+
+    assert(strlen(buffer) < 42 && "Time string is too long. Aborting to avoid any undefined behavior.");
+
+    return buffer;
 }
 
 //--------------------------------------------------------------------------------------------------

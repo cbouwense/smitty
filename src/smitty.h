@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -116,11 +117,11 @@ const char *smitty_test_result_to_string(smitty_test_result result);
 // Time utilities
 //--------------------------------------------------------------------------------------------------
 
-const double time_in_seconds(double time);
-const double time_in_milliseconds(double time);
-const double time_in_microseconds(double time);
-const double time_in_nanoseconds(double time);
-void print_most_readable_time(double time);
+const short  time_in_seconds(double time);
+const short  time_in_milliseconds(double time);
+const short  time_in_microseconds(double time);
+const short  time_in_nanoseconds(double time);
+const char  *get_most_readable_time(double time);
 
 //--------------------------------------------------------------------------------------------------
 // Output style utilities
