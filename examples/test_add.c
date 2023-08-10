@@ -17,10 +17,6 @@ smitty_test(it_can_add_a_positive_and_a_negative_integer, {
     expect_int_equal(add(-2, 3), 1);
 });
 
-//--------------------------------------------------------------------------------------------------
-// Smitty boilerplate
-//--------------------------------------------------------------------------------------------------
-
 smitty_register_and_run_tests(
     it_can_add_two_positive_integers,
     it_can_add_two_negative_integers,

@@ -103,10 +103,6 @@ smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
     free(buffer);
 });
 
-//--------------------------------------------------------------------------------------------------
-// Smitty boilerplate
-//--------------------------------------------------------------------------------------------------
-
 smitty_register_and_run_tests(
     it_creates_a_default_buffer_with_1024_bytes_of_capacity,
     it_creates_a_default_buffer_with_a_non_null_pointer_to_its_data,
