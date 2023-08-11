@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "scrump.h"
 
 ScrumpBuffer *scrump_buffer_create_default() {
     return scrump_buffer_create(BUFFER_DEFAULT_CAPACITY);
@@ -17,7 +17,7 @@ ScrumpBuffer *scrump_buffer_create(size_t capacity) {
     return buffer;
 }
 
-ReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size) {
+ScrumpReturnCodeType scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size) {
     const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
     if (size > remaining_capacity) return SCRUMP_ATTEMPTED_WRITE_OVERFLOW;
 
@@ -27,7 +27,7 @@ ReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size) {
     return SCRUMP_SUCCESS;
 }
 
-ReturnCode scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size) {
+ScrumpReturnCodeType scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size) {
     const size_t read_capacity = buffer->write_cursor - buffer->read_cursor;
     if (size > read_capacity) return SCRUMP_ATTEMPTED_READ_OVERFLOW;
 

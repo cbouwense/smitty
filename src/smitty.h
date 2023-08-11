@@ -1,3 +1,8 @@
+/*
+ * "Smitty" is the name of a stuffed animal I own. My wife loves him; therefore, I named this
+ * testing library after him.
+ */
+
 #pragma once
 
 #include <assert.h>

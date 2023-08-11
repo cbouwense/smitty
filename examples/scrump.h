@@ -1,3 +1,8 @@
+/*
+ * "Scrump" is a nickname for my bearded dragon. I think "Scrump Buffer" sounds funny, and therefore
+ * I named this buffer implementation after him. This is a simple buffer implementation that 
+ * utilizes the read/write "cursor" pattern.
+ */
 #pragma once
 
 #include <stdio.h>
@@ -10,7 +15,7 @@ typedef enum {
     SCRUMP_SUCCESS = 0,
     SCRUMP_ATTEMPTED_WRITE_OVERFLOW = 1,
     SCRUMP_ATTEMPTED_READ_OVERFLOW = 2,
-} ReturnCode;
+} ScrumpReturnCodeType;
 
 typedef struct scrumb_buffer {
     void *data;
@@ -26,6 +31,6 @@ ScrumpBuffer *scrump_buffer_create_default();
 
 ScrumpBuffer *scrump_buffer_create(size_t capacity);
 
-ReturnCode scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
+ScrumpReturnCodeType scrump_buffer_write(ScrumpBuffer *buffer, void *data, size_t size);
 
-ReturnCode scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);
+ScrumpReturnCodeType scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer, size_t size);

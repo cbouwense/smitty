@@ -7,7 +7,7 @@
     "smitty.h": "c",
     "typeinfo": "c",
     "string.h": "c",
-    "buffer.h": "c",
+    "scrump.h": "c",
     "stdlib.h": "c"
 }
 }
