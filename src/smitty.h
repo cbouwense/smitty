@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -79,6 +80,8 @@ typedef smitty_test_result (*smitty_test_case_func)();
         return 0; \
     }
 
+#define SMITTY_UNREACHABLE(message) assert(false && message)
+
 //--------------------------------------------------------------------------------------------------
 // Expects
 //--------------------------------------------------------------------------------------------------
@@ -104,13 +107,12 @@ smitty_expect_result expect_pointer_equal_internal(const void *actual, const voi
 //--------------------------------------------------------------------------------------------------
 
 void smitty_run_tests(smitty_test_case_func tests[],void (*before_each)(),void (*after_each)());
-smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)());
+smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name);
 
 //--------------------------------------------------------------------------------------------------
 // Test utilities
 //--------------------------------------------------------------------------------------------------
 
-void smitty_print_test_failure(const char *test_name, const char *file, const int line);
 const char *smitty_test_result_to_string(smitty_test_result result);
 
 //--------------------------------------------------------------------------------------------------

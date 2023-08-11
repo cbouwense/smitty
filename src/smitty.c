@@ -1,6 +1,7 @@
 #include "smitty.h"
 
-// #define SMITTY_VERBOSE
+#define SMITTY_VERBOSE
+// #define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
 // Expects
@@ -9,7 +10,11 @@
 smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
 
-    smitty_print_test_failure(test_name, file, line);
+    #ifdef SMITTY_ZEN
+    print_red("✘ %s\n", test_name);
+    #else
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
+    #endif
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected: %d\n\n", expected);
@@ -20,7 +25,7 @@ smitty_expect_result expect_int_equal_internal(const int actual, const int expec
 smitty_expect_result expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
     if (strcmp(actual, expected) == 0) return EXPECT_PASS;
 
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %s\n", actual);
     printf("Expected: %s\n\n", expected);
@@ -31,7 +36,7 @@ smitty_expect_result expect_string_equal_internal(const char *actual, const char
 smitty_expect_result expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == true) return EXPECT_PASS;
     
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected to be true\n\n");
@@ -42,7 +47,7 @@ smitty_expect_result expect_true_internal(const bool actual, const char *test_na
 smitty_expect_result expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == false) return EXPECT_PASS;
     
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %d\n", actual);
     printf("Expected to be false\n\n");
@@ -53,7 +58,7 @@ smitty_expect_result expect_false_internal(const bool actual, const char *test_n
 smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual == NULL) return EXPECT_PASS;
 
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected: %p\n\n", NULL);
@@ -64,7 +69,7 @@ smitty_expect_result expect_null_internal(const void *actual, const char *test_n
 smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual != NULL) return EXPECT_PASS;
     
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected to be not NULL\n\n");
@@ -75,7 +80,7 @@ smitty_expect_result expect_non_null_internal(const void *actual, const char *te
 smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
     
-    smitty_print_test_failure(test_name, file, line);
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
 
     print_red("Actual:\t  %p\n", actual);
     printf("Expected: %p\n\n", expected);
@@ -94,32 +99,23 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
     int failed_test_count = 0;
     int total_test_count = 0;
 
-    // Count the number of tests, assuming that the tests array is null terminated.
-    for (int i = 0; tests[i] != NULL; i++) {
-        total_test_count++;
-    }
-
     // The maximum amount of failures is the total amount of tests, so allocate that much space.
     const char *failed_test_names[total_test_count];
 
-    // Run each test, its hooks, and record results.
+    // Run each test, run each of its hooks, and record results.
     for (int i = 0; tests[i] != NULL; i++) {
-
-        // TODO: maybe we should have a way to see if the before_each function failed?
-        // Run before_each if we have one.
-        if (before_each != NULL) before_each();
+        assert(i < INT_MAX);
+        total_test_count++;
 
         const char *test_name = smitty_test_case_name(tests[i]);
         const smitty_test_result result = smitty_run_test(
             tests[i],
             before_each,
-            after_each
+            after_each,
+            test_name
         );
 
-        // TODO: maybe we should have a way to see if the after_each function failed?
-        // Run after_each if we have one.
-        if (after_each != NULL) after_each();
-
+        assert(result == TEST_PASS || result == TEST_FAIL);
         switch (result) {
             case TEST_PASS:
                 passed_test_count++;
@@ -131,11 +127,16 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
                 break;
 
             default:
-                passed_test_count++;
+                __builtin_unreachable();
                 break;
         }
     }
 
+    #ifdef SMITTY_ZEN
+    if (passed_test_count == total_test_count) {
+        print_green("All tests passed.\n");
+    }
+    #else
     printf("================================\n");
     printf("Total tests:\t");
     print_bold("%d\n", total_test_count);
@@ -155,19 +156,30 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
     printf("Time spent:\t");
     print_bold(get_most_readable_time(time_spent));
     printf("================================\n");
+    #endif
 }
 
-smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)()) {
-    if (before_each != NULL) before_each();
-    
+smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name) {
+    // TODO: maybe I could report an error from the before each as a test failure.
+    if (before_each != NULL) {
+        #ifdef SMITTY_VERBOSE
+        printf("Running %s's before_each...\n", test_name);
+        #endif
+
+        before_each();
+    }
+
     assert(test != NULL);
     const smitty_test_result result = test();
 
-    #ifdef SMITTY_VERBOSE
-    printf("%s: %s\n", name, smitty_test_result_to_string(result));
-    #endif
-
-    if (after_each != NULL) after_each();
+    // TODO: maybe I could report an error from the before each as a test failure.
+    if (after_each != NULL) {
+        #ifdef SMITTY_VERBOSE
+        printf("Running %s's after_each...\n", test_name);
+        #endif
+        
+        after_each();
+    }
 
     return result;
 }
@@ -175,12 +187,6 @@ smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_eac
 //--------------------------------------------------------------------------------------------------
 // Test utilities
 //--------------------------------------------------------------------------------------------------
-
-void smitty_print_test_failure(const char *test_name, const char *file, const int line) {
-    print_red_bold(">-- FAIL --> ");
-    print_red("%s", test_name);
-    printf(" | (%s - line %d)\n\n", file, line);
-}
 
 const char *smitty_test_result_to_string(smitty_test_result result) {
     assert(result == TEST_PASS || result == TEST_FAIL);
@@ -236,6 +242,7 @@ const char *get_most_readable_time(double time) {
 void print_bold(const char *string, ...) {
     set_output_style_to_bold();
 
+    // TODO: Could I DRY this up somehow?
     va_list args;
     va_start(args, string);
     vprintf(string, args);

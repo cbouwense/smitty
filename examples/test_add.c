@@ -10,7 +10,8 @@ smitty_test(it_can_add_two_negative_integers, {
 });
 
 smitty_test(it_can_add_two_numbers_whose_sum_is_zero, {
-    expect_int_equal(add(-42, 42), 0);
+    expect_int_equal(add(-42, 42), 2);
+    expect_int_equal(add(-42, 42), 2);
 });
 
 smitty_test(it_can_add_a_positive_and_a_negative_integer, {
