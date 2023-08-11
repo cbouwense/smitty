@@ -7,7 +7,7 @@
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-smitty_expect_result expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
 
     #ifdef SMITTY_ZEN
@@ -22,7 +22,7 @@ smitty_expect_result expect_int_equal_internal(const int actual, const int expec
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
     if (strcmp(actual, expected) == 0) return EXPECT_PASS;
 
     #ifdef SMITTY_ZEN
@@ -37,7 +37,7 @@ smitty_expect_result expect_string_equal_internal(const char *actual, const char
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == true) return EXPECT_PASS;
     
     #ifdef SMITTY_ZEN
@@ -52,7 +52,7 @@ smitty_expect_result expect_true_internal(const bool actual, const char *test_na
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
     if (actual == false) return EXPECT_PASS;
     
     #ifdef SMITTY_ZEN
@@ -67,7 +67,7 @@ smitty_expect_result expect_false_internal(const bool actual, const char *test_n
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual == NULL) return EXPECT_PASS;
 
     #ifdef SMITTY_ZEN
@@ -82,7 +82,7 @@ smitty_expect_result expect_null_internal(const void *actual, const char *test_n
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
     if (actual != NULL) return EXPECT_PASS;
     
     #ifdef SMITTY_ZEN
@@ -97,7 +97,7 @@ smitty_expect_result expect_non_null_internal(const void *actual, const char *te
     return EXPECT_FAIL;
 }
 
-smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
     
     #ifdef SMITTY_ZEN
@@ -132,7 +132,7 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
         total_test_count++;
 
         const char *test_name = smitty_test_case_name(tests[i]);
-        const smitty_test_result result = smitty_run_test(
+        const SmittyTestResultType result = smitty_run_test(
             tests[i],
             before_each,
             after_each,
@@ -184,7 +184,7 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
     #endif
 }
 
-smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name) {
+SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name) {
     // TODO: maybe I could report an error from the before each as a test failure.
     if (before_each != NULL) {
         #ifdef SMITTY_VERBOSE
@@ -195,7 +195,7 @@ smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_eac
     }
 
     assert(test != NULL);
-    const smitty_test_result result = test();
+    const SmittyTestResultType result = test();
 
     // TODO: maybe I could report an error from the before each as a test failure.
     if (after_each != NULL) {
@@ -213,7 +213,7 @@ smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_eac
 // Test utilities
 //--------------------------------------------------------------------------------------------------
 
-const char *smitty_test_result_to_string(smitty_test_result result) {
+const char *SmittyTestResultType_to_string(SmittyTestResultType result) {
     assert(result == TEST_PASS || result == TEST_FAIL);
     
     switch (result) {

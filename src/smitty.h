@@ -17,22 +17,22 @@
 typedef enum {
     EXPECT_PASS,
     EXPECT_FAIL,
-} smitty_expect_result;
+} SmittyExpectResultType;
 
 typedef enum {
     TEST_PASS,
     TEST_FAIL,
-} smitty_test_result;
+} SmittyTestResultType;
 
-// A function pointer to a function that returns a smitty_test_result, named smitty_test_case_func.
-typedef smitty_test_result (*smitty_test_case_func)();
+// A function pointer to a function that returns a SmittyTestResultType, named smitty_test_case_func.
+typedef SmittyTestResultType (*smitty_test_case_func)();
 
 //--------------------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------------------
 
 #define smitty_test(name, body) \
-    smitty_test_result name() { \
+    SmittyTestResultType name() { \
         int failed_expect_count = 0; \
         body \
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
@@ -98,26 +98,26 @@ typedef smitty_test_result (*smitty_test_case_func)();
 #define expect_non_null(actual)                failed_expect_count += expect_non_null_internal     (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 #define expect_pointer_equal(actual, expected) failed_expect_count += expect_pointer_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 
-smitty_expect_result expect_int_equal_internal(    const int   actual, const int   expected, const char *test_name, const char *file, const int line);
-smitty_expect_result expect_string_equal_internal( const char *actual, const char *expected, const char *test_name, const char *file, const int line);
-smitty_expect_result expect_true_internal(         const bool  actual,                       const char *test_name, const char *file, const int line);
-smitty_expect_result expect_false_internal(        const bool  actual,                       const char *test_name, const char *file, const int line);
-smitty_expect_result expect_null_internal(         const void *actual,                       const char *test_name, const char *file, const int line);
-smitty_expect_result expect_non_null_internal(     const void *actual,                       const char *test_name, const char *file, const int line);
-smitty_expect_result expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_int_equal_internal(    const int   actual, const int   expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_string_equal_internal( const char *actual, const char *expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_true_internal(         const bool  actual,                       const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_false_internal(        const bool  actual,                       const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_null_internal(         const void *actual,                       const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_non_null_internal(     const void *actual,                       const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
 
 //--------------------------------------------------------------------------------------------------
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
 void smitty_run_tests(smitty_test_case_func tests[],void (*before_each)(),void (*after_each)());
-smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name);
+SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name);
 
 //--------------------------------------------------------------------------------------------------
 // Test utilities
 //--------------------------------------------------------------------------------------------------
 
-const char *smitty_test_result_to_string(smitty_test_result result);
+const char *SmittyTestResultType_to_string(SmittyTestResultType result);
 
 //--------------------------------------------------------------------------------------------------
 // Time utilities
