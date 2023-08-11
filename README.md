@@ -15,5 +15,5 @@ cd smitty/
 ./watch.sh add
 
 // Windows
-./watch.bat add
+watch.bat add
 ```
