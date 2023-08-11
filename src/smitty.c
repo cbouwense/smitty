@@ -125,11 +125,6 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
                 passed_test_count++;
                 break;
 
-            /* 
-             * NOTE: Currently TEST_NOT_FOUND is counted as a failure, but it might be better to
-             * count it as a separate category to report.
-             */
-            case TEST_NOT_FOUND:
             case TEST_FAIL:
                 failed_test_names[failed_test_count] = test_name;
                 failed_test_count++;
@@ -158,7 +153,6 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
 
     printf("--------------------------------\n");
     printf("Time spent:\t");
-    // TODO: refactor this to use a to string function so we can pass it into our normal print functions.
     print_bold(get_most_readable_time(time_spent));
     printf("================================\n");
 }
@@ -166,22 +160,16 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
 smitty_test_result smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)()) {
     if (before_each != NULL) before_each();
     
-    const smitty_test_result result = test == NULL ? TEST_NOT_FOUND : test();
-    // TODO: we could even have a "simple" mode where it only says "All passed" or "Some failed" with the failures.
+    assert(test != NULL);
+    const smitty_test_result result = test();
+
     #ifdef SMITTY_VERBOSE
     printf("%s: %s\n", name, smitty_test_result_to_string(result));
     #endif
 
     if (after_each != NULL) after_each();
 
-    switch (result) {
-        case TEST_PASS:    
-        default:
-            return TEST_PASS;
-        case TEST_FAIL:
-        case TEST_NOT_FOUND:
-            return TEST_FAIL;
-    }
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,15 +183,12 @@ void smitty_print_test_failure(const char *test_name, const char *file, const in
 }
 
 const char *smitty_test_result_to_string(smitty_test_result result) {
+    assert(result == TEST_PASS || result == TEST_FAIL);
+    
     switch (result) {
-        case TEST_PASS:
-            return "PASS";
-        case TEST_FAIL:
-            return "FAIL";
-        case TEST_NOT_FOUND:
-            return "NOT FOUND";
-        default:
-            return "UNKNOWN";
+        case TEST_PASS: return "PASS";
+        case TEST_FAIL: return "FAIL";
+        default:        return "UNKNOWN TEST RESULT";
     }
 }
 
