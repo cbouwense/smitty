@@ -1,7 +1,7 @@
 #include "smitty.h"
 
 // #define SMITTY_VERBOSE
-#define SMITTY_ZEN
+// #define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
 // Expects
