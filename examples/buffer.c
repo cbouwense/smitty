@@ -1,6 +1,6 @@
 #include "buffer.h"
 
-ScrumpBuffer *scrump_scrump_buffer_create_default() {
+ScrumpBuffer *scrump_buffer_create_default() {
     return scrump_buffer_create(BUFFER_DEFAULT_CAPACITY);
 }
 

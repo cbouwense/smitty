@@ -22,7 +22,7 @@ typedef struct scrumb_buffer {
     void *write_cursor;
 } ScrumpBuffer;
 
-ScrumpBuffer *scrump_scrump_buffer_create_default();
+ScrumpBuffer *scrump_buffer_create_default();
 
 ScrumpBuffer *scrump_buffer_create(size_t capacity);
 

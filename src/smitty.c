@@ -1,7 +1,7 @@
 #include "smitty.h"
 
 // #define SMITTY_VERBOSE
-// #define SMITTY_ZEN
+#define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
 // Expects
@@ -213,7 +213,7 @@ SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_e
 // Test utilities
 //--------------------------------------------------------------------------------------------------
 
-const char *SmittyTestResultType_to_string(SmittyTestResultType result) {
+const char *smitty_test_result_type_to_string(SmittyTestResultType result) {
     assert(result == TEST_PASS || result == TEST_FAIL);
     
     switch (result) {
