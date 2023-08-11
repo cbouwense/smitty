@@ -1,6 +1,6 @@
 #include "smitty.h"
 
-#define SMITTY_VERBOSE
+// #define SMITTY_VERBOSE
 // #define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
@@ -127,7 +127,8 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
                 break;
 
             default:
-                __builtin_unreachable();
+                // Woe be upon ye. 
+                system("xdg-open https://gabaghoul.info");
                 break;
         }
     }
@@ -241,59 +242,33 @@ const char *get_most_readable_time(double time) {
 
 void print_bold(const char *string, ...) {
     set_output_style_to_bold();
-
-    // TODO: Could I DRY this up somehow?
-    va_list args;
-    va_start(args, string);
-    vprintf(string, args);
-    va_end(args);
-
+    smitty_print_va_list(string);
     reset_output_style();
 }
 
 void print_green(const char *string, ...) {
     set_output_color_to_green();
-    
-    va_list args;
-    va_start(args, string);
-    vprintf(string, args);
-    va_end(args);
-
+    smitty_print_va_list(string);
     reset_output_style();
 }
 
 void print_red(const char *string, ...) {
     set_output_color_to_red();
-    
-    va_list args;
-    va_start(args, string);
-    vprintf(string, args);
-    va_end(args);
-
+    smitty_print_va_list(string);
     reset_output_style();
 }
 
 void print_green_bold(const char *string, ...) {
     set_output_color_to_green();
     set_output_style_to_bold();
-
-    va_list args;
-    va_start(args, string);
-    vprintf(string, args);
-    va_end(args);
-
+    smitty_print_va_list(string);
     reset_output_style();
 }
 
 void print_red_bold(const char *string, ...) {
     set_output_color_to_red();
     set_output_style_to_bold();
-
-    va_list args;
-    va_start(args, string);
-    vprintf(string, args);
-    va_end(args);
-
+    smitty_print_va_list(string);
     reset_output_style();
 }
 

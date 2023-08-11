@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
@@ -21,7 +22,6 @@ typedef enum {
 typedef enum {
     TEST_PASS,
     TEST_FAIL,
-    TEST_NOT_FOUND,
 } smitty_test_result;
 
 // A function pointer to a function that returns a smitty_test_result, named smitty_test_case_func.
@@ -80,7 +80,11 @@ typedef smitty_test_result (*smitty_test_case_func)();
         return 0; \
     }
 
-#define SMITTY_UNREACHABLE(message) assert(false && message)
+#define smitty_print_va_list(string) \
+    va_list args; \
+    va_start(args, string); \
+    vprintf(string, args); \
+    va_end(args);
 
 //--------------------------------------------------------------------------------------------------
 // Expects
