@@ -37,7 +37,7 @@ smitty_test(it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity
 });
 
 smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor, {
-    ScrumpBuffer *buffer = scrump_buffer_create_default();
+    ScrumpBuffer *buffer = scrump_buffer_create(1024);
     char *data = "Hello";
 
     scrump_buffer_write(buffer, data, strlen(data));
@@ -66,7 +66,7 @@ smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_t
 });
 
 smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
-    ScrumpBuffer *buffer = scrump_buffer_create_default();
+    ScrumpBuffer *buffer = scrump_buffer_create(1024);
     char *data = "Hello, world!";
 
     scrump_buffer_write(buffer, data, strlen(data));
@@ -80,7 +80,7 @@ smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
 });
 
 smitty_test(it_returns_data_when_the_user_tries_to_read_every_byte_written_so_far, {
-    ScrumpBuffer *buffer = scrump_buffer_create_default();
+    ScrumpBuffer *buffer = scrump_buffer_create(1024);
     char *hello = "Hello";
     char *world = "World";
 

@@ -1,9 +1,5 @@
 #include "scrump.h"
 
-ScrumpBuffer *scrump_buffer_create_default() {
-    return scrump_buffer_create(BUFFER_DEFAULT_CAPACITY);
-}
-
 ScrumpBuffer *scrump_buffer_create(size_t capacity) {
     if (capacity == 0) return NULL;
 
@@ -34,5 +30,11 @@ ScrumpReturnCodeType scrump_buffer_read(ScrumpBuffer *buffer, void *read_buffer,
     memcpy(read_buffer, buffer->read_cursor, size);
     buffer->read_cursor += size;
 
+    return SCRUMP_SUCCESS;
+}
+
+ScrumpReturnCodeType scrump_buffer_free(ScrumpBuffer *buffer) {
+    free(buffer->data);
+    free(buffer);
     return SCRUMP_SUCCESS;
 }
