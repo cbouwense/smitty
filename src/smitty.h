@@ -50,6 +50,8 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
         return 0; \
     }
 
+// TODO: I wonder if there's a better way of doing before_each and after_each other than having a
+// bunch of different macros like this. Maybe some kinda options struct?
 #define smitty_run_test_suite_with_before_each(before_each, ...) \
     int main() { \
         smitty_test_case_func tests[] = { \
@@ -90,20 +92,20 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
 // Expects
 //--------------------------------------------------------------------------------------------------
 
-#define expect_int_equal(actual, expected)     failed_expect_count += expect_int_equal_internal    (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_string_equal(actual, expected)  failed_expect_count += expect_string_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_true(actual)                    failed_expect_count += expect_true_internal         (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_false(actual)                   failed_expect_count += expect_false_internal        (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_null(actual)                    failed_expect_count += expect_null_internal         (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_non_null(actual)                failed_expect_count += expect_non_null_internal     (actual,           __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
-#define expect_pointer_equal(actual, expected) failed_expect_count += expect_pointer_equal_internal(actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_int_equal(actual, expected) failed_expect_count += expect_int_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_string_equal(actual, expected) failed_expect_count += expect_string_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_true(actual) failed_expect_count += expect_true_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_false(actual) failed_expect_count += expect_false_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_null(actual) failed_expect_count += expect_null_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_non_null(actual) failed_expect_count += expect_non_null_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_pointer_equal(actual, expected) failed_expect_count += expect_pointer_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 
-SmittyExpectResultType expect_int_equal_internal(    const int   actual, const int   expected, const char *test_name, const char *file, const int line);
-SmittyExpectResultType expect_string_equal_internal( const char *actual, const char *expected, const char *test_name, const char *file, const int line);
-SmittyExpectResultType expect_true_internal(         const bool  actual,                       const char *test_name, const char *file, const int line);
-SmittyExpectResultType expect_false_internal(        const bool  actual,                       const char *test_name, const char *file, const int line);
-SmittyExpectResultType expect_null_internal(         const void *actual,                       const char *test_name, const char *file, const int line);
-SmittyExpectResultType expect_non_null_internal(     const void *actual,                       const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_string_equal_internal(const char *actual, const char *expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_true_internal(const bool actual, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_false_internal(const bool actual, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_null_internal(const void *actual, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line);
 SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
 
 //--------------------------------------------------------------------------------------------------
