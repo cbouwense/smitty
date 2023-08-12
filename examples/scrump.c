@@ -5,7 +5,9 @@
 //--------------------------------------------------------------------------------------------------
 
 ScrumpReturnCodeType scrump_buffer_free(ScrumpBuffer *buffer) {
-    free(buffer->data);
+    if (buffer != NULL) {
+        free(buffer->data);
+    }
     free(buffer);
     return SCRUMP_SUCCESS;
 }
@@ -76,6 +78,17 @@ ScrumpReturnCodeType scrump_int_buffer_write(ScrumpBuffer *buffer, const int *da
 
     memcpy(buffer->write_cursor, data, size);
     buffer->write_cursor += size;
+
+    return SCRUMP_SUCCESS;
+}
+
+ScrumpReturnCodeType scrump_int_buffer_read(ScrumpBuffer *buffer, int *read_buffer, const size_t size) {
+    const size_t read_capacity = buffer->write_cursor - buffer->read_cursor;
+    if (size > read_capacity) return SCRUMP_ATTEMPTED_READ_OVERFLOW;
+
+    memcpy(read_buffer, buffer->read_cursor, size);
+
+    buffer->read_cursor += size;
 
     return SCRUMP_SUCCESS;
 }
