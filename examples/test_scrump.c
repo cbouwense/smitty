@@ -263,10 +263,12 @@ smitty_test(scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts
     scrump_buffer_free(buffer);
 });
 
+#define smitty_array(...) { __VA_ARGS__ }
+
 smitty_test(scrump_int_buffer_reads_when_there_is_no_attempted_read_overflow, {
     ScrumpBuffer *buffer = scrump_int_buffer_create(1);
     int write_data = 42;
-    int read_data[] = { 0 };
+    int read_data[] = smitty_array(0);
 
     const ScrumpReturnCodeType return_code_write = scrump_int_buffer_write(buffer, &write_data, 1);
     const ScrumpReturnCodeType return_code_read = scrump_int_buffer_read(buffer, read_data, 1);
@@ -274,6 +276,23 @@ smitty_test(scrump_int_buffer_reads_when_there_is_no_attempted_read_overflow, {
     expect_enum_equal(return_code_write, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(return_code_read, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_int_equal(read_data[0], 42);
+
+    scrump_buffer_free(buffer);
+});
+
+smitty_test(scrump_int_buffer_reads_when_the_user_tries_to_read_every_byte_written_so_far, {
+    ScrumpBuffer *buffer = scrump_int_buffer_create(42);
+    int write_data[] = smitty_array(1, 7, 3, 8);
+
+    const ScrumpReturnCodeType return_code_write = scrump_int_buffer_write(buffer, write_data, 4);
+    const ScrumpReturnCodeType return_code_read = scrump_int_buffer_read(buffer, write_data, 4);
+
+    expect_enum_equal(return_code_write, SCRUMP_SUCCESS, scrump_return_code_to_string);
+    expect_enum_equal(return_code_read, SCRUMP_SUCCESS, scrump_return_code_to_string);
+    expect_int_equal(write_data[0], 1);
+    expect_int_equal(write_data[1], 7);
+    expect_int_equal(write_data[2], 3);
+    expect_int_equal(write_data[3], 8);
 
     scrump_buffer_free(buffer);
 });
@@ -303,6 +322,6 @@ smitty_register_and_run_tests(
     scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts_to_read_an_empty_buffer,
     scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor,
     scrump_int_buffer_reads_when_there_is_no_attempted_read_overflow,
-    // scrump_int_buffer_reads_when_the_user_tries_to_read_every_byte_written_so_far,
+    scrump_int_buffer_reads_when_the_user_tries_to_read_every_byte_written_so_far,
     // scrump_int_buffer_returns_read_buffer_too_small_error_when_the_read_buffer_isnt_big_enough_to_be_null_terminated,
 );
