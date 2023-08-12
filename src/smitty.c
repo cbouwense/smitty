@@ -2,7 +2,7 @@
 
 // TODO: There should be a better way of enabling these modes.
 // #define SMITTY_VERBOSE
-#define SMITTY_ZEN
+// #define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
 // Expects
@@ -214,7 +214,7 @@ SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_e
     assert(test != NULL);
     const SmittyTestResultType result = test();
 
-    // TODO: maybe I could report an error from the before each as a test failure.
+    // TODO: maybe I could report an error from the after each as a test failure.
     if (after_each != NULL) {
         #ifdef SMITTY_VERBOSE
         printf("Running %s's after_each...\n", test_name);

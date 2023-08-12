@@ -26,11 +26,24 @@ typedef struct scrumb_buffer {
 //-----------------------------------------------------------------------------------------------------------------
 // Scrump buffer core
 //-----------------------------------------------------------------------------------------------------------------
+
+ScrumpReturnCodeType  scrump_buffer_free(ScrumpBuffer *buffer);
+
+//-----------------------------------------------------------------------------------------------------------------
+// Scrump string buffer
+//-----------------------------------------------------------------------------------------------------------------
+
 ScrumpBuffer         *scrump_string_buffer_create(const size_t capacity);
 ScrumpReturnCodeType  scrump_string_buffer_write(ScrumpBuffer *buffer, const char *data, const size_t size);
 ScrumpReturnCodeType  scrump_string_buffer_read(ScrumpBuffer *buffer, char *read_buffer, const size_t size, const size_t read_buffer_size);
 
-ScrumpReturnCodeType  scrump_buffer_free(ScrumpBuffer *buffer);
+//-----------------------------------------------------------------------------------------------------------------
+// Scrump int buffer
+//-----------------------------------------------------------------------------------------------------------------
+
+ScrumpBuffer         *scrump_int_buffer_create(const size_t capacity);
+ScrumpReturnCodeType  scrump_int_buffer_write(ScrumpBuffer *buffer, const int *data, const size_t size);
+ScrumpReturnCodeType  scrump_int_buffer_read(ScrumpBuffer *buffer, int *read_buffer, const size_t size);
 
 //-----------------------------------------------------------------------------------------------------------------
 // Scrump buffer utilities

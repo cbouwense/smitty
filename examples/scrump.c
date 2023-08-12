@@ -1,5 +1,19 @@
 #include "scrump.h"
 
+//--------------------------------------------------------------------------------------------------
+// Scrump buffer core
+//--------------------------------------------------------------------------------------------------
+
+ScrumpReturnCodeType scrump_buffer_free(ScrumpBuffer *buffer) {
+    free(buffer->data);
+    free(buffer);
+    return SCRUMP_SUCCESS;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Scrump string buffer
+//--------------------------------------------------------------------------------------------------
+
 ScrumpBuffer *scrump_string_buffer_create(const size_t capacity) {
     if (capacity == 0) return NULL;
 
@@ -39,11 +53,36 @@ ScrumpReturnCodeType scrump_string_buffer_read(ScrumpBuffer *buffer, char *read_
     return SCRUMP_SUCCESS;
 }
 
-ScrumpReturnCodeType scrump_buffer_free(ScrumpBuffer *buffer) {
-    free(buffer->data);
-    free(buffer);
+//--------------------------------------------------------------------------------------------------
+// Scrump int buffer
+//--------------------------------------------------------------------------------------------------
+
+ScrumpBuffer *scrump_int_buffer_create(const size_t capacity) {
+    if (capacity == 0) return NULL;
+
+    ScrumpBuffer *buffer = malloc(sizeof(ScrumpBuffer));
+
+    buffer->data = malloc(sizeof(int) * capacity);
+    buffer->capacity = capacity;
+    buffer->read_cursor = buffer->data;
+    buffer->write_cursor = buffer->data;
+
+    return buffer;
+}
+
+ScrumpReturnCodeType scrump_int_buffer_write(ScrumpBuffer *buffer, const int *data, const size_t size) {
+    const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
+    if (size > remaining_capacity) return SCRUMP_ATTEMPTED_WRITE_OVERFLOW;
+
+    memcpy(buffer->write_cursor, data, size);
+    buffer->write_cursor += size;
+
     return SCRUMP_SUCCESS;
 }
+
+//-----------------------------------------------------------------------------------------------------------------
+// Scrump buffer utilities
+//-----------------------------------------------------------------------------------------------------------------
 
 const char *scrump_return_code_to_string(const int return_code) {
     switch (return_code) {
