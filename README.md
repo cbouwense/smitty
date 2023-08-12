@@ -7,13 +7,13 @@ https://github.com/cbouwense/smitty/assets/6403586/b81ac0a4-8cb9-494c-8335-57ff1
 # Try it out
 
 Run one of the examples
-```
+```bash
 git clone https://github.com/cbouwense/smitty.git
 cd smitty/
-```
 
-// Unix-like OS
+# Unix-like OS
 ./watch.sh add
 
-// Windows
+# Windows
 run.bat add
+```
