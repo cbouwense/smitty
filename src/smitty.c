@@ -113,6 +113,22 @@ SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const v
     return EXPECT_FAIL;
 }
 
+SmittyExpectResultType expect_enum_equal_internal(const int actual, const int expected, const char *enum_to_string(int), const char *test_name, const char *file, const int line) {
+    if (actual == expected) return EXPECT_PASS;
+    
+    #ifdef SMITTY_ZEN
+    print_red("✘ %s\n", test_name);
+    #else
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
+    #endif
+
+    print_red("Actual:\t  %s\n", enum_to_string(actual));
+    printf("Expected: %s\n\n", enum_to_string(expected));
+
+    return EXPECT_FAIL;
+}
+
+
 //--------------------------------------------------------------------------------------------------
 // Test runner core
 //--------------------------------------------------------------------------------------------------

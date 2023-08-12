@@ -106,6 +106,7 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
 #define expect_null(actual) failed_expect_count += expect_null_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 #define expect_non_null(actual) failed_expect_count += expect_non_null_internal (actual, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 #define expect_pointer_equal(actual, expected) failed_expect_count += expect_pointer_equal_internal (actual, expected, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
+#define expect_enum_equal(actual, expected, enum_to_string_func) failed_expect_count += expect_enum_equal_internal (actual, expected, enum_to_string_func, __func__, __FILE__, __LINE__) == EXPECT_FAIL ? 1 : 0;
 
 // TODO: It might be nice to have some sort of internal.h file that contains all the internal stuff.
 SmittyExpectResultType expect_int_equal_internal(const int actual, const int expected, const char *test_name, const char *file, const int line);
@@ -115,6 +116,7 @@ SmittyExpectResultType expect_false_internal(const bool actual, const char *test
 SmittyExpectResultType expect_null_internal(const void *actual, const char *test_name, const char *file, const int line);
 SmittyExpectResultType expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line);
 SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
+SmittyExpectResultType expect_enum_equal_internal(const int actual, const int expected, const char *enum_to_string_func(const int), const char *test_name, const char *file, const int line);
 
 //--------------------------------------------------------------------------------------------------
 // Test runner core
