@@ -2,7 +2,7 @@
 #include "scrump.h"
 
 //--------------------------------------------------------------------------------------------------
-// String Buffer
+// Smitty string buffer
 //--------------------------------------------------------------------------------------------------
 
 smitty_test(it_returns_null_when_scrump_string_buffer_created_with_zero_capacity, {
@@ -13,7 +13,15 @@ smitty_test(it_returns_null_when_scrump_string_buffer_created_with_zero_capacity
     free(buffer);
 });
 
-smitty_test(it_returns_attempted_overflow_when_a_user_attempts_an_overflow, {
+smitty_test(it_returns_non_null_when_scrump_string_buffer_created_with_non_zero_capacity, {
+    ScrumpBuffer *buffer = scrump_string_buffer_create(42);
+
+    expect_non_null(buffer);
+
+    free(buffer);
+});
+
+smitty_test(it_returns_a_write_overflow_error_when_a_user_attempts_to_write_past_the_buffer_capacity, {
     ScrumpBuffer *buffer = scrump_string_buffer_create(3);
     char *data = "Hello, world!";
 
@@ -40,48 +48,59 @@ smitty_test(it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity
     free(buffer);
 });
 
-// smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor, {
-//     ScrumpBuffer *buffer = scrump_buffer_create(1024);
-//     char *data = "Hello";
+smitty_test(it_successfully_writes_when_data_is_bigger_than_capacity_but_size_is_within_capacity, {
+    ScrumpBuffer *buffer = scrump_string_buffer_create(5);
+    char *data = "Hello, world!";
 
-//     scrump_buffer_write(buffer, data, strlen(data));
+    ScrumpReturnCodeType result = scrump_string_buffer_write(buffer, data, 5);
+
+    expect_int_equal(result, SCRUMP_SUCCESS);
+
+    free(buffer);
+});
+
+smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor, {
+    ScrumpBuffer *buffer = scrump_string_buffer_create(42);
+    char *data = "Hello";
+
+    scrump_string_buffer_write(buffer, data, strlen(data));
     
-//     // Attempt to read one more byte than is available.
-//     char read_buffer[6];
-//     const ScrumpReturnCodeType result = scrump_buffer_read(buffer, read_buffer, 6);
+    const short written_byte_count = strlen(data);
+    char read_buffer[written_byte_count + 1];
+    const ScrumpReturnCodeType result = scrump_string_buffer_read(buffer, read_buffer, written_byte_count + 1);
 
-//     expect_int_equal(result, SCRUMP_ATTEMPTED_READ_OVERFLOW);
+    expect_int_equal(result, SCRUMP_ATTEMPTED_READ_OVERFLOW);
 
-//     free(buffer);
-// });
+    free(buffer);
+});
 
-// // This is a bit redundant because the read cursor should always be behind the write cursor, so an
-// // attempt to read more bytes than the capacity is an attempt to read past the write cursor. But, I
-// // kinda like this test anyways.
-// smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_capacity, {
-//     ScrumpBuffer *buffer = scrump_buffer_create(1024);
+// This is a bit redundant because the read cursor should always be behind the write cursor, so an
+// attempt to read more bytes than the capacity is an attempt to read past the write cursor. But, I
+// kinda like this test anyways.
+smitty_test(it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_capacity, {
+    ScrumpBuffer *buffer = scrump_string_buffer_create(1024);
     
-//     char read_buffer[2048];
-//     const ScrumpReturnCodeType result = scrump_buffer_read(buffer, read_buffer, 2048);
+    char read_buffer[2048];
+    const ScrumpReturnCodeType result = scrump_string_buffer_read(buffer, read_buffer, 2048);
 
-//     expect_int_equal(result, SCRUMP_ATTEMPTED_READ_OVERFLOW);
+    expect_int_equal(result, SCRUMP_ATTEMPTED_READ_OVERFLOW);
 
-//     free(buffer);
-// });
+    free(buffer);
+});
 
-// smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
-//     ScrumpBuffer *buffer = scrump_buffer_create(1024);
-//     char *data = "Hello, world!";
+smitty_test(it_returns_data_when_there_is_no_attempted_read_overflow, {
+    ScrumpBuffer *buffer = scrump_string_buffer_create(1024);
+    char *data = "Hello, world!";
 
-//     scrump_buffer_write(buffer, data, strlen(data));
-    
-//     char read_buffer[5];
-//     scrump_buffer_read(buffer, read_buffer, 5);
+    scrump_string_buffer_write(buffer, data, strlen(data));
 
-//     expect_string_equal(read_buffer, "Hello");
+    char read_buffer[13];
+    scrump_string_buffer_read(buffer, read_buffer, 13);
 
-//     free(buffer);
-// });
+    expect_string_equal(read_buffer, "Hello, world!");
+
+    free(buffer);
+});
 
 // smitty_test(it_returns_data_when_the_user_tries_to_read_every_byte_written_so_far, {
 //     ScrumpBuffer *buffer = scrump_buffer_create(1024);
@@ -102,9 +121,12 @@ smitty_test(it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity
 // TODO: It would be nice to detect when a test has not been registered and print a warning.
 smitty_register_and_run_tests(
     it_returns_null_when_scrump_string_buffer_created_with_zero_capacity,
-    it_returns_attempted_overflow_when_a_user_attempts_an_overflow,
+    it_returns_non_null_when_scrump_string_buffer_created_with_non_zero_capacity,
+    it_returns_a_write_overflow_error_when_a_user_attempts_to_write_past_the_buffer_capacity,
+    it_successfully_writes_when_data_is_bigger_than_capacity_but_size_is_within_capacity,
     it_returns_attempted_write_overflow_when_write_cursor_is_at_capacity,
-    // it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor,
-    // it_returns_data_when_there_is_no_attempted_read_overflow,
+    it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor,
+    it_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_capacity,
+    it_returns_data_when_there_is_no_attempted_read_overflow,
     // it_returns_data_when_the_user_tries_to_read_every_byte_written_so_far,
 );

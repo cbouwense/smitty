@@ -1,7 +1,8 @@
 #include "smitty.h"
 
+// TODO: There should be a better way of enabling these modes.
 // #define SMITTY_VERBOSE
-// #define SMITTY_ZEN
+#define SMITTY_ZEN
 
 //--------------------------------------------------------------------------------------------------
 // Expects
