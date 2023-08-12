@@ -16,34 +16,39 @@ typedef enum {
     SCRUMP_READ_BUFFER_TOO_SMALL = 3,
 } ScrumpReturnCodeType;
 
-typedef struct scrumb_buffer {
-    void *data;
-    size_t capacity;
-    void *read_cursor;
-    void *write_cursor;
-} ScrumpBuffer;
+typedef struct scrump_char_buffer {
+    char   *data;
+    size_t  capacity;
+    char   *read_cursor;
+    char   *write_cursor;
+} ScrumpCharBuffer;
 
-//-----------------------------------------------------------------------------------------------------------------
-// Scrump buffer core
-//-----------------------------------------------------------------------------------------------------------------
-
-ScrumpReturnCodeType  scrump_buffer_free(ScrumpBuffer *buffer);
+typedef struct scrump_int_buffer {
+    int    *data;
+    size_t  capacity;
+    int    *read_cursor;
+    int    *write_cursor;
+} ScrumpIntBuffer;
 
 //-----------------------------------------------------------------------------------------------------------------
 // Scrump string buffer
 //-----------------------------------------------------------------------------------------------------------------
 
-ScrumpBuffer         *scrump_string_buffer_create(const size_t capacity);
-ScrumpReturnCodeType  scrump_string_buffer_write(ScrumpBuffer *buffer, const char *data, const size_t size);
-ScrumpReturnCodeType  scrump_string_buffer_read(ScrumpBuffer *buffer, char *read_buffer, const size_t size, const size_t read_buffer_size);
+ScrumpCharBuffer     *scrump_char_buffer_create(const size_t capacity);
+ScrumpReturnCodeType  scrump_char_buffer_free(ScrumpCharBuffer *buffer);
+ScrumpReturnCodeType  scrump_char_buffer_write(ScrumpCharBuffer *buffer, const char data[], const size_t size);
+ScrumpReturnCodeType  scrump_char_buffer_read(ScrumpCharBuffer *buffer, char *read_buffer, const size_t size, const size_t read_buffer_size);
+void                  scrump_char_buffer_debug(const ScrumpCharBuffer *buffer, const char *buffer_name);
 
 //-----------------------------------------------------------------------------------------------------------------
 // Scrump int buffer
 //-----------------------------------------------------------------------------------------------------------------
 
-ScrumpBuffer         *scrump_int_buffer_create(const size_t capacity);
-ScrumpReturnCodeType  scrump_int_buffer_write(ScrumpBuffer *buffer, const int *data, const size_t size);
-ScrumpReturnCodeType  scrump_int_buffer_read(ScrumpBuffer *buffer, int *read_buffer, const size_t size);
+ScrumpIntBuffer      *scrump_int_buffer_create(const size_t capacity);
+ScrumpReturnCodeType  scrump_int_buffer_free(ScrumpIntBuffer *buffer);
+ScrumpReturnCodeType  scrump_int_buffer_write(ScrumpIntBuffer *buffer, const int data[], const size_t size);
+ScrumpReturnCodeType  scrump_int_buffer_read(ScrumpIntBuffer *buffer, int *read_buffer, const size_t size);
+void                  scrump_int_buffer_debug(const ScrumpIntBuffer *buffer, const char *buffer_name);
 
 //-----------------------------------------------------------------------------------------------------------------
 // Scrump buffer utilities

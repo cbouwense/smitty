@@ -45,6 +45,15 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
 
 #define smitty_test_case_name(name) #name
 
+// smitty_array simply expands to the arguments passed to it in the form of array initializtion.
+// This is necessary because if you try to initialize an array inside of a smitty_test normally,
+// the preprocessor will think that the commas in the array are separating arguments to the
+// smitty_test macro.
+//
+// TODO: I really dislike this, and should look into how to not do this. But, honestly it's not 
+// that big of a deal.
+#define smitty_initialize_array(...) { __VA_ARGS__ }
+
 #define smitty_register_and_run_tests(...) \
     int main() { \
         smitty_test_case_func tests[] = { \
@@ -117,6 +126,8 @@ SmittyExpectResultType expect_null_internal(const void *actual, const char *test
 SmittyExpectResultType expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line);
 SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line);
 SmittyExpectResultType expect_enum_equal_internal(const int actual, const int expected, const char *enum_to_string_func(const int), const char *test_name, const char *file, const int line);
+// TODO: expect_float_equal
+// TODO: expect_array_equal
 
 //--------------------------------------------------------------------------------------------------
 // Test runner core
