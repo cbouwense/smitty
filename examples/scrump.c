@@ -25,26 +25,6 @@ ScrumpReturnCodeType scrump_char_buffer_free(ScrumpCharBuffer *buffer) {
     return SCRUMP_SUCCESS;
 }
 
-/* TODO: I think my implementation of the ScrumpCharBuffer isn't quite right. Consider:
- *
- * ScrumpCharBuffer looks like this:
- * [
- *  p1, --> ['H', 'e', 'l', 'l', 'o']
- *  p2, --> ['w', 'o', 'r', 'l', 'd']
- *  p3, --> ['!']
- * ]
- * 
- * So a read of size 1 returns ['H'], and a read of size 3 returns ['H', 'e', 'l'].
- * Whereas, a ScrumpIntBuffer looks like this:
- * [1, 7, 3, 8]
- *
- * Really, I would imagine that a ScrumpCharBuffer should look like this:
- * ['H', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd', '!']
- * 
- * So I think I want to refactor my string_buffer to basically just be a string_view. And then later
- * I can also make a pointer buffer.
- */
-
 ScrumpReturnCodeType scrump_char_buffer_write(ScrumpCharBuffer *buffer, const char data[], const size_t size) {
     const size_t remaining_capacity = buffer->capacity - (buffer->write_cursor - buffer->data);
     if (size > remaining_capacity) return SCRUMP_ATTEMPTED_WRITE_OVERFLOW;
@@ -67,7 +47,7 @@ ScrumpReturnCodeType scrump_char_buffer_read(ScrumpCharBuffer *buffer, char *rea
     if (read_buffer_size < size + 1) return SCRUMP_READ_BUFFER_TOO_SMALL;
 
     strncpy(read_buffer, buffer->read_cursor, size);
-    // Manually null terminate the destination string
+    // Manually null terminate the destination string.
     read_buffer[size] = '\0';
 
     buffer->read_cursor += size;
@@ -75,37 +55,50 @@ ScrumpReturnCodeType scrump_char_buffer_read(ScrumpCharBuffer *buffer, char *rea
     return SCRUMP_SUCCESS;
 }
 
-// TODO: the read and write cursor is pretty half baked, but it's pretty good. Maybe consider making
-// this better, or more robust.
+/* 
+ * TODO: when the screen is too small, the read cursor is technically aligned, but it is unclear
+ * what it is aligned to. For example:
+ * 
+ *                         | read
+ *                         v
+ * data=['H', 'e', 'l', 'l', 'o', 'W
+ * ', 'o', 'r', 'l', 'd', ...]
+ *                         ^
+ *                         | write
+ * 
+ * In this output it kinda looks like read is pointing to the 'l', but really it's pointing to the
+ * ... that had to wrap around to the next line. For now the answer is to just make sure your
+ * terminal is big enough to fit the output. But, maybe this would be interesting to fix.
+ */
 void scrump_char_buffer_debug(const ScrumpCharBuffer *buffer, const char *buffer_name) {
     const size_t size = buffer->write_cursor - buffer->data;
     const char *data = buffer->data;
-    const size_t read_cursor_offset = buffer->read_cursor - buffer->data;
+
+    // For example, if the first character is 'e', it will look like `'e', `, thus 5 spaces.
+    const int spaces_per_character = 5;
+    // For example, the first line reads `data=['`, thus 7 spaces.
+    const int offset_from_left = 7;
+
+    const size_t read_cursor_offset = ((buffer->read_cursor - buffer->data) * spaces_per_character) + offset_from_left;
+    const size_t write_cursor_offset = ((buffer->write_cursor - buffer->data) * spaces_per_character) + offset_from_left;
 
     printf("========== %s ==========\n", buffer_name);
     printf("| size: %zu | capacity: %zu\n", size, buffer->capacity);
     printf("--------------------------------\n");
-    for(int i = 0; i < read_cursor_offset + 1; i++) printf(" ");
-    printf("read |\n");
-    for(int i = 0; i < read_cursor_offset + 1; i++) printf(" ");
-    printf("     v\n");
+    for(int i = 0; i < read_cursor_offset; i++) printf(" ");
+    printf("| read\n");
+    for(int i = 0; i < read_cursor_offset; i++) printf(" ");
+    printf("v\n");
     printf("data=[");
     for (size_t i = 0; i < size; i++) {
-        printf("'%c'", data[i]);
-        if (i < size - 1) printf(", ");
+        printf("'%c', ", data[i]);
     }
-    printf("]\n");
+    printf("...]\n");
     
-    const size_t write_cursor_offset = buffer->write_cursor - buffer->data;
-
-    
-    // For example, if the first character is 'e', it will look like `'e', `, thus 5 spaces.
-    const int spaces_per_character = 5;
-    const int spaces_between_read_and_write = ((write_cursor_offset - read_cursor_offset) * spaces_per_character) - 2;
-    for(int i = 0; i < spaces_between_read_and_write; i++) printf(" ");
-    printf("      ^\n");
-    for(int i = 0; i < spaces_between_read_and_write; i++) printf(" ");
-    printf("write |\n\n");
+    for(int i = 0; i < write_cursor_offset; i++) printf(" ");
+    printf("^\n");
+    for(int i = 0; i < write_cursor_offset; i++) printf(" ");
+    printf("| write\n\n");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,16 +150,39 @@ ScrumpReturnCodeType scrump_int_buffer_read(ScrumpIntBuffer *buffer, int *read_b
     return SCRUMP_SUCCESS;
 }
 
+
 void scrump_int_buffer_debug(const ScrumpIntBuffer *buffer, const char *buffer_name) {
     const size_t size = buffer->write_cursor - buffer->data;
     const int *data = buffer->data;
 
-    printf("%s: size=%zu, capacity=%zu, data=[", buffer_name, size, buffer->capacity);
+    // TODO: this only works for single digit numbers.
+    const int spaces_per_int = 3;
+    // For example, the first line reads `data=[`, thus 6 spaces.
+    const int offset_from_left = 6;
+
+    const size_t read_cursor_offset = ((buffer->read_cursor - buffer->data) * spaces_per_int) + offset_from_left;
+    const size_t write_cursor_offset = ((buffer->write_cursor - buffer->data) * spaces_per_int) + offset_from_left;
+
+    printf("========== %s ==========\n", buffer_name);
+    printf("| size: %zu | capacity: %zu\n", size, buffer->capacity);
+    printf("--------------------------------\n");
+    for(int i = 0; i < read_cursor_offset; i++) printf(" ");
+    printf("| read\n");
+    for(int i = 0; i < read_cursor_offset; i++) printf(" ");
+    printf("v\n");
+    printf("data=[");
     for (size_t i = 0; i < size; i++) {
-        printf("%d", data[i]);
-        if (i < size - 1) printf(", ");
+        printf("%d, ", data[i]);
     }
-    printf("]\n");
+
+    // TODO: make it so that a full buffer doesn't end with `, ]`
+    if (size == buffer->capacity) printf("]\n");
+    else printf("...]\n");
+    
+    for(int i = 0; i < write_cursor_offset; i++) printf(" ");
+    printf("^\n");
+    for(int i = 0; i < write_cursor_offset; i++) printf(" ");
+    printf("| write\n\n");
 }
 
 //-----------------------------------------------------------------------------------------------------------------

@@ -87,7 +87,6 @@ smitty_test(scrump_char_buffer_returns_attempted_read_overflow_when_user_attempt
 
     expect_enum_equal(write_return_code, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(read_return_code, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
-
     scrump_char_buffer_free(buffer);
 });
 
@@ -123,10 +122,9 @@ smitty_test(scrump_char_buffer_returns_read_buffer_too_small_error_when_the_read
 smitty_test(scrump_char_buffer_reads_when_there_is_no_attempted_read_overflow, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(1024);
     const char *data = "Hello, world!";
+    char read_buffer[14];
 
     const ScrumpReturnCodeType write_return_code = scrump_char_buffer_write(buffer, data, strlen(data));
-
-    char read_buffer[14];
     const ScrumpReturnCodeType return_code = scrump_char_buffer_read(buffer, read_buffer, 13, 14);
 
     expect_enum_equal(write_return_code, SCRUMP_SUCCESS, scrump_return_code_to_string);
