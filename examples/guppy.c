@@ -1,9 +1,20 @@
 #include "guppy.h"
 
-void guppy_print_int_array_internal(int array[], size_t size_of_array) {
+void guppy_print_char_array_internal(char array[], size_t size_of_array, const char* array_name) {
+    const size_t length = size_of_array / sizeof(char);
+    
+    printf("%s: [", array_name);
+    for (size_t i = 0; i < length; i++) {
+        printf("%c", array[i]);
+        if (i < length - 1) printf(", ");
+    }
+    printf("]\n");
+}
+
+void guppy_print_int_array_internal(int array[], size_t size_of_array, const char* array_name) {
     const size_t length = size_of_array / sizeof(int);
     
-    printf("[");
+    printf("%s: [", array_name);
     for (size_t i = 0; i < length; i++) {
         printf("%d", array[i]);
         if (i < length - 1) printf(", ");
@@ -13,7 +24,9 @@ void guppy_print_int_array_internal(int array[], size_t size_of_array) {
 
 int main() {
     int foo[4] = {1, 2, 3, 4};
+    char bar[4] = {'a', 'b', 'c', 'd'};
 
+    guppy_print_char_array(bar);
     guppy_print_int_array(foo);
 
     return 0;

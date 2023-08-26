@@ -156,7 +156,9 @@ SmittyExpectResultType expect_enum_equal_internal(const int actual, const int ex
 //--------------------------------------------------------------------------------------------------
 
 void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void (*after_each)()) {
+    #ifndef SMITTY_ZEN
     clock_t start = clock();
+    #endif
 
     int passed_test_count = 0;
     int failed_test_count = 0;
