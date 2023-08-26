@@ -16,6 +16,7 @@
     "atomic": "c",
     "cstring": "c",
     "__string": "c",
-    "__locale": "c"
+    "__locale": "c",
+    "guppy.h": "c"
   }
 }
