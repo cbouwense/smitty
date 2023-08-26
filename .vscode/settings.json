@@ -12,6 +12,10 @@
     "functional": "c",
     "array": "c",
     "string": "c",
-    "string_view": "c"
+    "string_view": "c",
+    "atomic": "c",
+    "cstring": "c",
+    "__string": "c",
+    "__locale": "c"
   }
 }

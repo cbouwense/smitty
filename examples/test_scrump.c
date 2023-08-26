@@ -87,6 +87,7 @@ smitty_test(scrump_char_buffer_returns_attempted_read_overflow_when_user_attempt
 
     expect_enum_equal(write_return_code, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(read_return_code, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
+    
     scrump_char_buffer_free(buffer);
 });
 
@@ -297,17 +298,16 @@ smitty_test(scrump_int_buffer_can_read_when_user_reads_within_read_cursor, {
 smitty_test(scrump_int_buffer_can_read_when_user_reads_every_written_byte, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(42);
     int write_data[] = smitty_initialize_array(1, 7, 3, 8);
+    int read_data[] = smitty_initialize_array(0, 0, 0, 0);
+    const size_t write_data_length = sizeof(write_data) / sizeof(int);
 
     const ScrumpReturnCodeType return_code_write = scrump_int_buffer_write(buffer, write_data, 4);
-    const ScrumpReturnCodeType return_code_read = scrump_int_buffer_read(buffer, write_data, 4);
+    const ScrumpReturnCodeType return_code_read = scrump_int_buffer_read(buffer, read_data, 4);
 
     expect_enum_equal(return_code_write, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(return_code_read, SCRUMP_SUCCESS, scrump_return_code_to_string);
-    // TODO: replace with expect_array_equal once that is implemented.
-    expect_int_equal(write_data[0], 1);
-    expect_int_equal(write_data[1], 7);
-    expect_int_equal(write_data[2], 3);
-    expect_int_equal(write_data[3], 8);
+
+    expect_int_array_equal(read_data, write_data, write_data_length);
 
     scrump_int_buffer_free(buffer);
 });
@@ -315,6 +315,7 @@ smitty_test(scrump_int_buffer_can_read_when_user_reads_every_written_byte, {
 smitty_test(scrump_int_buffer_can_write_and_read_multiple_times, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(42);
     int write_data[] = smitty_initialize_array(1, 7, 3, 8);
+    const size_t write_data_length = sizeof(write_data) / sizeof(int);
     int read_data_one[] = smitty_initialize_array(0, 0, 0, 0);
     int read_data_two[] = smitty_initialize_array(0, 0, 0, 0);
 
@@ -327,15 +328,10 @@ smitty_test(scrump_int_buffer_can_write_and_read_multiple_times, {
     expect_enum_equal(return_code_read_one, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(return_code_write_two, SCRUMP_SUCCESS, scrump_return_code_to_string);
     expect_enum_equal(return_code_read_two, SCRUMP_SUCCESS, scrump_return_code_to_string);
-    
-    expect_int_equal(read_data_one[0], 1);
-    expect_int_equal(read_data_one[1], 7);
-    expect_int_equal(read_data_one[2], 3);
-    expect_int_equal(read_data_one[3], 8);
-    expect_int_equal(read_data_two[0], 1);
-    expect_int_equal(read_data_two[1], 7);
-    expect_int_equal(read_data_two[2], 3);
-    expect_int_equal(read_data_two[3], 8);
+
+    expect_int_array_equal(read_data_one, write_data, write_data_length);
+    expect_int_array_equal(read_data_two, write_data, write_data_length);
+    expect_int_array_equal(read_data_one, read_data_two, write_data_length);
 
     scrump_int_buffer_free(buffer);
 });

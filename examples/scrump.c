@@ -163,6 +163,7 @@ void scrump_int_buffer_debug(const ScrumpIntBuffer *buffer, const char *buffer_n
     const size_t read_cursor_offset = ((buffer->read_cursor - buffer->data) * spaces_per_int) + offset_from_left;
     const size_t write_cursor_offset = ((buffer->write_cursor - buffer->data) * spaces_per_int) + offset_from_left;
 
+    // TODO: It would be nice if we could calculate how many characters to print here to get a consistent width.
     printf("========== %s ==========\n", buffer_name);
     printf("| size: %zu | capacity: %zu\n", size, buffer->capacity);
     printf("--------------------------------\n");

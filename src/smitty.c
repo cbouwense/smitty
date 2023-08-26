@@ -113,6 +113,28 @@ SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const v
     return EXPECT_FAIL;
 }
 
+SmittyExpectResultType expect_int_array_equal_internal(const int actual[], const int expected[], const size_t expected_length, const char *test_name, const char *file, const int line) {
+    if (memcmp(actual, expected, expected_length) == 0) return EXPECT_PASS;
+    
+    #ifdef SMITTY_ZEN
+    print_red("✘ %s\n\n", test_name);
+    #else
+    print_red("✘ %s | (%s - line %d)\n\n", test_name, file, line);
+    #endif
+
+    print_red("Actual:\t  [");
+    // TODO: I wish I had a way of printing arrays easily. Maybe I could make that.
+    for (int i = 0; i < expected_length-1; i++) print_red("%d, ", actual[i]);
+    print_red("%d", actual[expected_length-1]);
+    print_red("]\n");
+
+    printf("Expected: [");
+    for (int i = 0; i < expected_length-1; i++) printf("%d, ", expected[i]);
+    printf("%d]\n\n", expected[expected_length-1]);
+
+    return EXPECT_FAIL;
+}
+
 SmittyExpectResultType expect_enum_equal_internal(const int actual, const int expected, const char *enum_to_string(int), const char *test_name, const char *file, const int line) {
     if (actual == expected) return EXPECT_PASS;
     
