@@ -1,0 +1,1 @@
+ls examples/* | entr sh -c "./guppy.sh"
