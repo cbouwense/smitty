@@ -30,14 +30,14 @@ typedef enum {
 } SmittyTestResultType;
 
 // A function pointer to a function that returns a SmittyTestResultType, named smitty_test_case_func.
-typedef SmittyTestResultType (*smitty_test_case_func)();
+typedef SmittyTestResultType (*smitty_test_case_func)(void);
 
 //--------------------------------------------------------------------------------------------------
 // Macros
 //--------------------------------------------------------------------------------------------------
 
 #define smitty_test(name, body) \
-    SmittyTestResultType name() { \
+    SmittyTestResultType name(void) { \
         int failed_expect_count = 0; \
         body \
         return failed_expect_count == 0 ? TEST_PASS : TEST_FAIL; \
@@ -55,7 +55,7 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
 #define smitty_initialize_array(...) { __VA_ARGS__ }
 
 #define smitty_register_and_run_tests(...) \
-    int main() { \
+    int main(void) { \
         smitty_test_case_func tests[] = { \
             __VA_ARGS__ \
             NULL \
@@ -67,7 +67,7 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
 // TODO: I wonder if there's a better way of doing before_each and after_each other than having a
 // bunch of different macros like this. Maybe some kinda options struct?
 #define smitty_run_test_suite_with_before_each(before_each, ...) \
-    int main() { \
+    int main(void) { \
         smitty_test_case_func tests[] = { \
             __VA_ARGS__ \
             NULL \
@@ -77,7 +77,7 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
     }
 
 #define smitty_run_test_suite_with_after_each(after_each, ...) \
-    int main() { \
+    int main(void) { \
         smitty_test_case_func tests[] = { \
             __VA_ARGS__ \
             NULL \
@@ -87,7 +87,7 @@ typedef SmittyTestResultType (*smitty_test_case_func)();
     }
 
 #define smitty_run_test_suite_with_before_and_after_each(before_each, after_each, ...) \
-    int main() { \
+    int main(void) { \
         smitty_test_case_func tests[] = { \
             __VA_ARGS__ \
             NULL \
@@ -137,8 +137,8 @@ SmittyExpectResultType expect_int_array_equal_internal(const int actual[], const
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(smitty_test_case_func tests[],void (*before_each)(),void (*after_each)());
-SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name);
+void smitty_run_tests(smitty_test_case_func tests[],void (*before_each)(void),void (*after_each)(void));
+SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(void), void (*after_each)(void), const char* test_name);
 
 //--------------------------------------------------------------------------------------------------
 // Test utilities
@@ -166,7 +166,7 @@ void print_red(const char *string, ...);
 void print_green_bold(const char *string, ...);
 void print_red_bold(const char *string, ...);
 
-void set_output_color_to_green();
-void set_output_color_to_red();
-void set_output_style_to_bold();
-void reset_output_style();
+void set_output_color_to_green(void);
+void set_output_color_to_red(void);
+void set_output_style_to_bold(void);
+void reset_output_style(void);

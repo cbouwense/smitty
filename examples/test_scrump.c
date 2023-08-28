@@ -11,7 +11,7 @@ smitty_test(scrump_char_buffer_returns_null_when_created_with_zero_capacity, {
     expect_null(buffer);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_returns_non_null_when_created_with_non_zero_capacity, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(42);
@@ -19,7 +19,7 @@ smitty_test(scrump_char_buffer_returns_non_null_when_created_with_non_zero_capac
     expect_non_null(buffer);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_returns_attempted_write_overflow_when_user_attempts_to_write_past_the_buffer_capacity, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(3);
@@ -30,7 +30,7 @@ smitty_test(scrump_char_buffer_returns_attempted_write_overflow_when_user_attemp
     expect_enum_equal(return_code, SCRUMP_ATTEMPTED_WRITE_OVERFLOW, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_returns_attempted_write_overflow_when_write_cursor_is_at_capacity, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(5);
@@ -47,7 +47,7 @@ smitty_test(scrump_char_buffer_returns_attempted_write_overflow_when_write_curso
     expect_enum_equal(second_write_return_code, SCRUMP_ATTEMPTED_WRITE_OVERFLOW, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_can_write_once, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(42);
@@ -58,7 +58,7 @@ smitty_test(scrump_char_buffer_can_write_once, {
     expect_enum_equal(return_code, SCRUMP_SUCCESS, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_can_write_multiple_times, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(42);
@@ -75,7 +75,7 @@ smitty_test(scrump_char_buffer_can_write_multiple_times, {
     expect_enum_equal(return_code_four, SCRUMP_ATTEMPTED_WRITE_OVERFLOW, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(42);
@@ -89,7 +89,7 @@ smitty_test(scrump_char_buffer_returns_attempted_read_overflow_when_user_attempt
     expect_enum_equal(read_return_code, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
     
     scrump_char_buffer_free(buffer);
-});
+})
 
 // This is a bit redundant because the read cursor should always be behind the write cursor, so an
 // attempt to read more bytes than the capacity is an attempt to read past the write cursor. But, I
@@ -103,7 +103,7 @@ smitty_test(scrump_char_buffer_returns_attempted_read_overflow_when_user_attempt
     expect_enum_equal(return_code, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_returns_read_buffer_too_small_error_when_the_read_buffer_isnt_big_enough_to_be_null_terminated, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(1024);
@@ -118,7 +118,7 @@ smitty_test(scrump_char_buffer_returns_read_buffer_too_small_error_when_the_read
     expect_enum_equal(read_return_code, SCRUMP_READ_BUFFER_TOO_SMALL, scrump_return_code_to_string);
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_reads_when_there_is_no_attempted_read_overflow, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(1024);
@@ -133,7 +133,7 @@ smitty_test(scrump_char_buffer_reads_when_there_is_no_attempted_read_overflow, {
     expect_string_equal(read_buffer, "Hello, world!");
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_reads_when_the_user_tries_to_read_every_byte_written_so_far, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(1024);
@@ -152,7 +152,7 @@ smitty_test(scrump_char_buffer_reads_when_the_user_tries_to_read_every_byte_writ
     expect_string_equal(read_buffer, "HelloWorld");
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_char_buffer_can_write_and_read_multiple_times, {
     ScrumpCharBuffer *buffer = scrump_char_buffer_create(1024);
@@ -184,7 +184,7 @@ smitty_test(scrump_char_buffer_can_write_and_read_multiple_times, {
     expect_string_equal(read_buffer_three, "hello");
 
     scrump_char_buffer_free(buffer);
-});
+})
 
 //--------------------------------------------------------------------------------------------------
 // Scrump int buffer
@@ -204,7 +204,7 @@ smitty_test(scrump_int_buffer_returns_non_null_when_created_with_non_zero_capaci
     expect_non_null(buffer);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_returns_attempted_write_overflow_when_user_attempts_to_write_past_the_buffer_capacity, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(1);
@@ -215,7 +215,7 @@ smitty_test(scrump_int_buffer_returns_attempted_write_overflow_when_user_attempt
     expect_enum_equal(return_code, SCRUMP_ATTEMPTED_WRITE_OVERFLOW, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_can_write_once, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(4);
@@ -226,7 +226,7 @@ smitty_test(scrump_int_buffer_can_write_once, {
     expect_enum_equal(return_code, SCRUMP_SUCCESS, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_can_write_multiple_times, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(3);
@@ -241,7 +241,7 @@ smitty_test(scrump_int_buffer_can_write_multiple_times, {
     expect_enum_equal(return_code_three, SCRUMP_SUCCESS, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_returns_attempted_write_overflow_when_user_writes_when_cursor_is_at_capacity, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(1);
@@ -254,7 +254,7 @@ smitty_test(scrump_int_buffer_returns_attempted_write_overflow_when_user_writes_
     expect_enum_equal(return_code_two, SCRUMP_ATTEMPTED_WRITE_OVERFLOW, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts_to_read_an_empty_buffer, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(1);
@@ -265,7 +265,7 @@ smitty_test(scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts
     expect_enum_equal(return_code, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts_to_read_past_the_write_cursor, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(1);
@@ -278,7 +278,7 @@ smitty_test(scrump_int_buffer_returns_attempted_read_overflow_when_user_attempts
     expect_enum_equal(return_code_two, SCRUMP_ATTEMPTED_READ_OVERFLOW, scrump_return_code_to_string);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_can_read_when_user_reads_within_read_cursor, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(1);
@@ -293,7 +293,7 @@ smitty_test(scrump_int_buffer_can_read_when_user_reads_within_read_cursor, {
     expect_int_equal(read_data[0], 42);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_can_read_when_user_reads_every_written_byte, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(42);
@@ -310,7 +310,7 @@ smitty_test(scrump_int_buffer_can_read_when_user_reads_every_written_byte, {
     expect_int_array_equal(read_data, write_data, write_data_length);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 smitty_test(scrump_int_buffer_can_write_and_read_multiple_times, {
     ScrumpIntBuffer *buffer = scrump_int_buffer_create(42);
@@ -334,7 +334,7 @@ smitty_test(scrump_int_buffer_can_write_and_read_multiple_times, {
     expect_int_array_equal(read_data_one, read_data_two, write_data_length);
 
     scrump_int_buffer_free(buffer);
-});
+})
 
 // TODO: It would be nice to detect when a test has not been registered and print a warning.
 smitty_register_and_run_tests(
@@ -364,4 +364,4 @@ smitty_register_and_run_tests(
     scrump_int_buffer_can_read_when_user_reads_within_read_cursor,
     scrump_int_buffer_can_read_when_user_reads_every_written_byte,
     scrump_int_buffer_can_write_and_read_multiple_times,
-);
+)

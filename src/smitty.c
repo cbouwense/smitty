@@ -155,7 +155,7 @@ SmittyExpectResultType expect_enum_equal_internal(const int actual, const int ex
 // Test runner core
 //--------------------------------------------------------------------------------------------------
 
-void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void (*after_each)()) {
+void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(void), void (*after_each)(void)) {
     #ifndef SMITTY_ZEN
     clock_t start = clock();
     #endif
@@ -225,7 +225,7 @@ void smitty_run_tests(smitty_test_case_func tests[], void (*before_each)(), void
     #endif
 }
 
-SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(), void (*after_each)(), const char* test_name) {
+SmittyTestResultType smitty_run_test(smitty_test_case_func test, void (*before_each)(void), void (*after_each)(void), const char* test_name) {
     // TODO: maybe I could report an error from the before each as a test failure.
     if (before_each != NULL) {
         #ifdef SMITTY_VERBOSE
@@ -337,18 +337,18 @@ void print_red_bold(const char *string, ...) {
     reset_output_style();
 }
 
-void set_output_color_to_green() {
+void set_output_color_to_green(void) {
     printf("\033[0;32m");
 }
 
-void set_output_color_to_red() {
+void set_output_color_to_red(void) {
     printf("\033[0;31m");
 }
 
-void set_output_style_to_bold() {
+void set_output_style_to_bold(void) {
     printf("\033[1m");
 }
 
-void reset_output_style() {
+void reset_output_style(void) {
     printf("\033[0m");
 }
