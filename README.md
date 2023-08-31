@@ -12,7 +12,7 @@ git clone https://github.com/cbouwense/smitty.git
 cd smitty/
 
 # Unix-like OS
-./watch.sh add
+./run.sh add
 
 # Windows
 run.bat add
