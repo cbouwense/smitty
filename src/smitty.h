@@ -172,12 +172,13 @@ void reset_output_style(void);
 // Implementation
 //--------------------------------------------------------------------------------------------------
 
-#ifdef SMITTY_IMPLEMENTATION
+// #ifdef SMITTY_IMPLEMENTATION
 
-SmittyExpectResultType expect_int_equal_internal(const int actual,
-                                                 const int expected,
+SmittyExpectResultType expect_int_equal_internal(const int   actual,
+                                                 const int   expected,
                                                  const char *test_name,
-                                                 const char *file,const int line) {
+                                                 const char *file,
+                                                 const int   line) {
     if (actual == expected) return EXPECT_PASS;
 
 #ifdef SMITTY_ZEN
@@ -192,7 +193,11 @@ SmittyExpectResultType expect_int_equal_internal(const int actual,
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_string_equal_internal(const char *actual, const char* expected, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_string_equal_internal(const char *actual,
+                                                    const char *expected,
+                                                    const char *test_name,
+                                                    const char *file,
+                                                    const int   line) {
     if (strcmp(actual, expected) == 0) return EXPECT_PASS;
 
 #ifdef SMITTY_ZEN
@@ -207,7 +212,10 @@ SmittyExpectResultType expect_string_equal_internal(const char *actual, const ch
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_true_internal(const bool actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_true_internal(const bool  actual,
+                                            const char *test_name,
+                                            const char *file,
+                                            const int   line) {
     if (actual == true) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -222,7 +230,10 @@ SmittyExpectResultType expect_true_internal(const bool actual, const char *test_
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_false_internal(const bool actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_false_internal(const bool  actual,
+                                             const char *test_name,
+                                             const char *file,
+                                             const int   line) {
     if (actual == false) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -237,7 +248,10 @@ SmittyExpectResultType expect_false_internal(const bool actual, const char *test
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_null_internal(const void *actual,
+                                            const char *test_name,
+                                            const char *file,
+                                            const int   line) {
     if (actual == NULL) return EXPECT_PASS;
 
 #ifdef SMITTY_ZEN
@@ -252,7 +266,10 @@ SmittyExpectResultType expect_null_internal(const void *actual, const char *test
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_non_null_internal(const void *actual, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_non_null_internal(const void *actual,
+                                                const char *test_name,
+                                                const char *file,
+                                                const int   line) {
     if (actual != NULL) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -267,7 +284,11 @@ SmittyExpectResultType expect_non_null_internal(const void *actual, const char *
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const void *expected, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_pointer_equal_internal(const void *actual,
+                                                     const void *expected,
+                                                     const char *test_name,
+                                                     const char *file,
+                                                     const int   line) {
     if (actual == expected) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -282,7 +303,12 @@ SmittyExpectResultType expect_pointer_equal_internal(const void *actual, const v
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_int_array_equal_internal(const int actual[], const int expected[], const size_t expected_length, const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_int_array_equal_internal(const int     actual[],
+                                                       const int     expected[],
+                                                       const size_t  expected_length,
+                                                       const char   *test_name,
+                                                       const char   *file,
+                                                       const int     line) {
     if (memcmp(actual, expected, expected_length) == 0) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -304,7 +330,12 @@ SmittyExpectResultType expect_int_array_equal_internal(const int actual[], const
     return EXPECT_FAIL;
 }
 
-SmittyExpectResultType expect_enum_equal_internal(const int actual, const int expected, const char *enum_to_string(int), const char *test_name, const char *file, const int line) {
+SmittyExpectResultType expect_enum_equal_internal(const int   actual,
+                                                  const int   expected,
+                                                  const char *enum_to_string(int),
+                                                  const char *test_name,
+                                                  const char *file,
+                                                  const int   line) {
     if (actual == expected) return EXPECT_PASS;
     
 #ifdef SMITTY_ZEN
@@ -522,4 +553,4 @@ void reset_output_style(void) {
     printf("\033[0m");
 }
 
-#endif // SMITTY_IMPLEMENTATION
+// #endif // SMITTY_IMPLEMENTATION
