@@ -1,5 +1,5 @@
 #include "../src/smitty.h"
-#include "scrump.h"
+#include "../include/scrump.h"
 
 //--------------------------------------------------------------------------------------------------
 // Scrump char buffer
