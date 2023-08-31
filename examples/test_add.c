@@ -1,3 +1,4 @@
+#define SMITTY_IMPLEMENTATION
 #include "../src/smitty.h"
 #include "add.h"
 
@@ -22,4 +23,4 @@ smitty_register_and_run_tests(
     it_can_add_two_negative_integers,
     it_can_add_two_numbers_whose_sum_is_zero,
     it_can_add_a_positive_and_a_negative_integer,
-);
+)

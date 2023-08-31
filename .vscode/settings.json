@@ -17,6 +17,7 @@
     "cstring": "c",
     "__string": "c",
     "__locale": "c",
-    "guppy.h": "c"
+    "guppy.h": "c",
+    "add.h": "c"
   }
 }

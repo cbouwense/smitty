@@ -5,8 +5,8 @@ void guppy_print_bool_array_internal(bool array[], size_t size_of_array, const c
     
     printf("%s: [", array_name);
     for (size_t i = 0; i < length; i++) {
-        if (array[i]) printf("true (1)");
-        else          printf("false (0)");
+        if (array[i]) printf("true");
+        else          printf("false");
 
         if (i < length - 1) printf(", ");
     }
